@@ -155,8 +155,7 @@ w1->state = wsrc->state;
 strcpy(w1->tag, wsrc->tag);
 return (void *)w1;
 }
-
-int vertex_print (FILE * pf, const void * v){
+/*
 int sum=0, i;
 if(!v || !pf){
 return -1;
@@ -169,5 +168,17 @@ fprintf(stdout, "%c", w->tag[i]);
 sum++;
 }
 
+*/
+int vertex_print (FILE * pf, const void * v){
+int sum = 0;
+char id[TAG_LENGTH];
+Vertex *w = (Vertex *)v;
+if(!v) return -1;
+fprintf(pf,"[");
+fprintf(pf,"%ld,",w->id);
+fprintf(pf,"%s,",w->tag);
+fprintf(pf,"%d]",w->state);
+sprintf(id,"%ld",w->id);
+sum = strlen(id) + strlen(w->tag) + 1;
 return sum;
 }

@@ -12,7 +12,9 @@ int main(){
     vertex_setTag(w,"two");
     vertex_setState(v,WHITE);
     vertex_setState(w,BLACK);
-    printf("[%ld %s %d][%ld %s %d]\n",vertex_getId(v),vertex_getTag(v),vertex_getState(v),vertex_getId(w),vertex_getTag(w),vertex_getState(w));
+    vertex_print(stdout,v);
+    vertex_print(stdout,w);
+    printf("\n");
     if(vertex_cmp(v,w) == 0){
         printf("Equals? : Si\n");
     }else{
@@ -21,7 +23,9 @@ int main(){
     printf("%s\n",vertex_getTag(w));
     t = vertex_copy(v);
     printf("%ld\n",vertex_getId(t));
-    printf("[%ld %s %d][%ld %s %d]\n",vertex_getId(v),vertex_getTag(v),vertex_getState(v),vertex_getId(t),vertex_getTag(t),vertex_getState(t));
+    vertex_print(stdout,v);
+    vertex_print(stdout,t);
+    printf("\n");
     if(vertex_cmp(v,t) == 0){
         printf("Equals? : Si\n");
     }else{
