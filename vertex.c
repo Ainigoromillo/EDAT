@@ -86,9 +86,9 @@ long vertex_getId (const Vertex * v){
 const char* vertex_getTag (const Vertex * v){
   if (!v) return NULL;
   char *tag;
-  tag = (char *)calloc(TAG_LENGTH  + 1, sizeof(char));
+  tag = (char *)calloc(strlen(v->tag)  + 1, sizeof(char));
   if(!(tag)) return NULL;
-  tag[TAG_LENGTH] = '\0';
+  tag[strlen(v->tag)] = '\0';
   strcpy(tag,v->tag);
   return tag;
 }
