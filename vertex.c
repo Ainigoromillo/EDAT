@@ -76,6 +76,7 @@ Vertex *vertex_initFromString(char *descr){
   return v;
 }
 void vertex_free (void * v){
+  Vertex *w = (Vertex *)v;
   free(v);
 }
 long vertex_getId (const Vertex * v){
@@ -85,12 +86,12 @@ long vertex_getId (const Vertex * v){
 }
 const char* vertex_getTag (const Vertex * v){
   if (!v) return NULL;
-  char *tag;
+  /*char *tag;
   tag = (char *)calloc(strlen(v->tag)  + 1, sizeof(char));
   if(!(tag)) return NULL;
   tag[strlen(v->tag)] = '\0';
-  strcpy(tag,v->tag);
-  return tag;
+  strcpy(tag,v->tag);*/
+  return v->tag;
 }
 Label vertex_getState (const Vertex * v){
   if (!v) return ERROR_VERTEX;
@@ -174,7 +175,7 @@ int sum = 0;
 char id[TAG_LENGTH];
 Vertex *w = (Vertex *)v;
 if(!v) return -1;
-fprintf(pf,"[%ld,%s,%ld]",vertex_getId(w),vertex_getTag(w),vertex_getState(w));
+fprintf(pf,"[%ld,%s,%d]",vertex_getId(w),vertex_getTag(w),vertex_getState(w));
 sprintf(id,"%ld",w->id);
 sum = strlen(id) + strlen(w->tag) + 1;
 return sum;
