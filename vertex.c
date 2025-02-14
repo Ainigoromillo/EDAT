@@ -77,7 +77,7 @@ Vertex *vertex_initFromString(char *descr){
 }
 void vertex_free (void * v){
   Vertex *w = (Vertex *)v;
-  free(v);
+  free(w);
 }
 long vertex_getId (const Vertex * v){
   long id = v->id;

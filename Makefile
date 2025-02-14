@@ -16,10 +16,10 @@ p1_e1: $(OBJECTSP1E1)
 p1_e2: $(OBJECTSP1E2)
 	$(CC) $(CFLAGS) -o p1_e2 $(OBJECTSP1E2)
 
-p1_e3: $(OBJECTSP1E3)
+#p1_e3: $(OBJECTSP1E3)
 	$(CC) $(CFLAGS) -o p1_e3 $(OBJECTSP1E3)
 
-p1_e3.o: p1_e3.c vertex.h graph.h
+#p1_e3.o: p1_e3.c vertex.h graph.h
 	$(CC) $(CFLAGS) -c p1_e3.c
 
 p1_e2.o: p1_e2.c vertex.h graph.h
