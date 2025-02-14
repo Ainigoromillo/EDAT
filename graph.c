@@ -55,7 +55,27 @@ Status graph_newVertex(Graph *g, char *desc);
  *
  * @return OK if the edge could be added to the graph, ERROR otherwise.
  **/
-Status graph_newEdge(Graph *g, long orig, long dest);
+Status graph_newEdge(Graph *g, long orig, long dest){
+    Bool found=FALSE;
+    int i,j;
+    if(!graph_contains(g, orig) || graph_contains(g, dest)){
+        return ERROR;
+    }
+    for(i=0;i<MAX_VTX && !found;i++){
+        if(orig == vertex_getId((g->vertices[i]))){
+            found=TRUE;
+        }
+    }
+    found=FALSE;
+    for(j=0;j<MAX_VTX && !found;j++){
+        if(orig == vertex_getId((g->vertices[j]))){
+            found=TRUE;
+        }
+    }
+    (g->num_edges)++;
+    (g->connections[i][j])++;
+    return OK;
+}
 
 /**
  * @brief Checks if a graph contains a vertex.
@@ -66,7 +86,15 @@ Status graph_newEdge(Graph *g, long orig, long dest);
  * @return Returns TRUE if there is a vertex in the graph g with the
  * ID id, FALSE otherwise.
  **/
-Bool graph_contains(const Graph *g, long id);
+Bool graph_contains(const Graph *g, long id){
+    if(!g) return ERROR;
+    for(int i=0;i<MAX_VTX;i++){
+        if(id == vertex_getId((g->vertices)[i])){
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
 
 /**
  * @brief Returns the total number of vertices in a graph.
@@ -76,7 +104,10 @@ Bool graph_contains(const Graph *g, long id);
  * @return Returns The number of vertices in the graph, or -1 if 
  * there is any error.
  **/
-int graph_getNumberOfVertices(const Graph *g);
+int graph_getNumberOfVertices(const Graph *g){
+    if(!g) return -1;
+    return g->num_vertices;
+}
 
 /**
  * @brief Returns the total number of edges  * in the graph.
