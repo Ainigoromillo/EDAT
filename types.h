@@ -12,7 +12,7 @@
 
 #ifndef TYPES_H_
 #define TYPES_H_
-
+#define MAX_CHARS_IN_LINE 100
 /**
  * @brief ADT Boolean
  */
