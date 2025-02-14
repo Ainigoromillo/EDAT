@@ -34,13 +34,13 @@ vertex.o: vertex.c vertex.h
 graph.o: graph.c graph.h vertex.h
 	$(CC) $(CFLAGS) -c graph.c
 
-clear:
+.PHONY clear:
 	rm -rf *.o 
 
-clean:
+.PHONY clean:
 	rm -rf *.o $(EJS)
 
-run:
+.PHONY run:
 	@echo ">>>>>>Running p1_e1"
 	./p1_e1
 	@echo ">>>>>>Running p1_e2"
@@ -48,7 +48,7 @@ run:
 	@echo ">>>>>>Running p1_e3"
 	./p1_e3 g1.txt
 
-runv:
+.PHONY runv:
 	@echo ">>>>>>Running p1_e1 with valgrind"
 	valgrind --leak-check=full ./p1_e1
 	@echo ">>>>>>Running p1_e2 with valgrind"

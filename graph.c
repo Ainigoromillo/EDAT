@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "graph.h"
 #define MAX_VTX 4096
 struct _Graph {
@@ -320,7 +321,7 @@ Status graph_readFromFile (FILE *fin, Graph *g){
     int i;
     long id1, id2;
     char line[MAX_CHARS_IN_LINE];
-    fscanf(fin, "%d\n", g->num_vertices);
+    fscanf(fin, "%d\n", &g->num_vertices);
     for(i=0;i<g->num_vertices;i++){
         fgets(line, MAX_CHARS_IN_LINE, fin);
         graph_newVertex(g, line);
