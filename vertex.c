@@ -143,7 +143,6 @@ return strcmp(w1->tag, w1->tag);
 }
 }
 
-
 void * vertex_copy (const void * src){
 if(!src){
 return NULL;
