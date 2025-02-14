@@ -59,7 +59,9 @@ Status graph_newVertex(Graph *g, char *desc){
     Vertex *Nvertex = NULL;
     Nvertex = vertex_initFromString(desc);
     for(i = 0; i < g->num_vertices; i++){
-        if(vertex_getId(Nvertex) == vertex_getId(g->vertices[i])) j = 1;break;
+        if(vertex_getId(Nvertex) == vertex_getId(g->vertices[i])){ 
+            j = 1;
+            break;}
     }
     if(j == 1){
         return OK;
@@ -160,12 +162,12 @@ int graph_getNumberOfEdges(const Graph *g){
  **/
 Bool graph_connectionExists(const Graph *g, long orig, long dest){
     if(!g) return ERROR;
-    int i,j,origen,destino;
+    int i, origen,destino;
     for(i = 0; i < g->num_vertices; i++){
         if(vertex_getId(g->vertices[i]) == orig) origen = i;
         if(vertex_getId(g->vertices[i]) == destino) destino = i;
     }
-    return (g->connections[i][j]);
+    return (g->connections[origen][destino]);
 
 }
 
