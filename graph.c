@@ -17,7 +17,12 @@ struct _Graph {
  * @return A pointer to the graph if it was correctly allocated, 
  * NULL otherwise.
  **/
-Graph * graph_init();
+Graph * graph_init(){
+    Graph *graph = NULL;
+    graph = (Graph *)malloc(sizeof(Graph));
+    if(!graph) return NULL;
+    return graph;
+}
 
 /**
  * @brief Frees a graph.
@@ -26,7 +31,13 @@ Graph * graph_init();
  *
  * @param g Pointer to graph to be freed.
  **/
-void graph_free(Graph *g);
+void graph_free(Graph *g){
+    int i;
+    for(i = 0; i < g->num_vertices ; i++){
+        if(g->vertices[i]) free(g->vertices[i]);
+    }
+    free(g);
+}
 
 /**
  * @brief Inserts a new vertex in a graph.
@@ -41,7 +52,21 @@ void graph_free(Graph *g);
  * @return Returns OK if the vertex could be created (or if it exists 
  * already), ERROR otherwise.
  **/
-Status graph_newVertex(Graph *g, char *desc);
+Status graph_newVertex(Graph *g, char *desc){
+    if(!g) return ERROR;
+    int i,j = 0;
+    Vertex *Nvertex = NULL;
+    Nvertex = vertex_initFromString(desc);
+    for(i = 0; i < g->num_vertices; i++){
+        if(vertex_getId(Nvertex) == vertex_getId(g->vertices[i])) j = 1;break;
+    }
+    if(j == 1){
+        return OK;
+    }
+    g->num_vertices ++;
+    g->vertices[g->num_vertices - 1] = Nvertex;
+    return OK;
+}
 
 /**
  * @brief Creates an edge between to vertices of a graph.
@@ -86,7 +111,10 @@ int graph_getNumberOfVertices(const Graph *g);
  * @return Returns The number of vertices in the graph, or -1 if 
  * there is any error.
  **/
-int graph_getNumberOfEdges(const Graph *g);
+int graph_getNumberOfEdges(const Graph *g){
+    if(!g) return ERROR;
+    return g->num_edges;
+}
 
 /**
  * @brief Determines if there is a connection between a pair of vertices.
@@ -98,7 +126,16 @@ int graph_getNumberOfEdges(const Graph *g);
  * @return Returns TRUE if there is a connection in g from orig
  *  to dest, FALSE otherwise.
  **/
-Bool graph_connectionExists(const Graph *g, long orig, long dest);
+Bool graph_connectionExists(const Graph *g, long orig, long dest){
+    if(!g) return ERROR;
+    int i,j,origen,destino;
+    for(i = 0; i < g->num_vertices; i++){
+        if(vertex_getId(g->vertices[i]) == orig) origen = i;
+        if(vertex_getId(g->vertices[i]) == destino) destino = i;
+    }
+    return (g->connections[i][j]);
+
+}
 
 /**
  * @brief Gets the number of connections starting at a given vertex.
