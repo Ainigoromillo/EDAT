@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
-
-
+#define MAX_VTX 4096
+struct _Graph {
+    Vertex *vertices[MAX_VTX];
+    Bool connections[MAX_VTX][MAX_VTX];
+    int num_vertices;
+    int num_edges;
+};
 /**
  * @brief Creates a new empty graph.
  *
