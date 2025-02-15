@@ -180,7 +180,19 @@ Bool graph_connectionExists(const Graph *g, long orig, long dest){
  * @return Returns the total number of connections starting at 
  * vertex with ID id, or -1 if there is any error.
  **/
-int graph_getNumberOfConnectionsFromId(const Graph *g, long id);
+int graph_getNumberOfConnectionsFromId(const Graph *g, long id){
+    if(!g) return -1;
+    int i,pos_orig,sum = 0;
+    for(i = 0; i < g->num_vertices ;i++){
+        if(vertex_getId(g->vertices[i]) == id) pos_orig = i; break;
+    }
+    for(i = 0; i < g->num_vertices ; i++){
+        if(g->connections[pos_orig][i]) sum++;
+    }
+    return sum;
+
+
+}
 
 /**
  * @brief Returns an array with the ids of all the vertices which a 
@@ -232,7 +244,17 @@ long *graph_getConnectionsFromId(const Graph *g, long id){
  * @return Returns the total number of connections starting at 
  * vertex with Tag tag, or -1 if there is any error.
  **/
-int graph_getNumberOfConnectionsFromTag(const Graph *g, char *tag);
+int graph_getNumberOfConnectionsFromTag(const Graph *g, char *tag){
+    if(!g ||!tag) return -1;
+    int i,pos_orig,sum = 0;
+    for(i = 0; i < g->num_vertices ;i++){
+        if(vertex_getTag(g->vertices[i]) == tag) pos_orig = i; break;
+    }
+    for(i = 0; i < g->num_vertices ; i++){
+        if(g->connections[pos_orig][i]) sum++;
+    }
+    return sum;
+}
 
 /**
  * @brief Returns an array with the ids of all the vertices which a 
@@ -292,8 +314,28 @@ long *graph_getConnectionsFromTag(const Graph *g, char *tag){
  *
  * @return The number of characters printed, or -1 if there is any error.
  */
-int graph_print (FILE *pf, const Graph *g);
-
+int graph_print (FILE *pf, const Graph *g){
+    if(!pf ||!g) return -1;
+    int i,j,printed,total = 0;
+    for(i = 0; i < g->num_vertices; i++){
+        printed = vertex_print(pf,g->vertices[i]);
+        if( printed == -1) return -1;
+        total += printed;
+        fprintf(pf,": ");
+        total ++;
+        for(j = 0; j < g->num_vertices; j++){
+            if(g->connections[i][j]) {
+                printed = vertex_print(pf,g->vertices[j]);
+                if(printed == -1) return -1;
+                total += printed;
+                
+            }
+            
+        }
+        fprintf(pf,"\n");
+    }
+    return total;
+}
 
 /**
  * @brief Reads a graph definition from a text file.
