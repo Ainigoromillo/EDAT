@@ -89,6 +89,7 @@ Status graph_newEdge(Graph *g, long orig, long dest){
     Bool found=FALSE;
     int pos_orig=-1, pos_dest=-1;
     if(!graph_contains(g, orig) || !graph_contains(g, dest)){
+        printf("error en la primera comprobacion");
         return ERROR;
     }
     for(int i=0;i<g->num_vertices && !found;i++){
@@ -98,9 +99,10 @@ Status graph_newEdge(Graph *g, long orig, long dest){
         if(dest == vertex_getId((g->vertices[i]))){
             pos_dest = i;
         }
-        if(pos_orig == -1 || pos_dest == -1){
-            return ERROR;
-        }
+        
+    }
+    if(pos_orig == -1 || pos_dest == -1){
+        return ERROR;
     }
     (g->num_edges)++;
     (g->connections[pos_orig][pos_dest])++;
@@ -380,14 +382,19 @@ Status graph_readFromFile (FILE *fin, Graph *g){
     int i;
     long id1, id2;
     char line[MAX_CHARS_IN_LINE];
-    fscanf(fin, "%d\n", &(g->num_vertices));
+    fscanf(fin, "%d", &(g->num_vertices));
+    fgetc(fin);
     for(i=0;i<g->num_vertices;i++){
-        fgets(line, MAX_CHARS_IN_LINE, fin);
-        graph_newVertex(g, line);
+        if (!fgets(line, MAX_CHARS_IN_LINE, fin)) {
+            return ERROR;
+        }
+        if (graph_newVertex(g, line) == ERROR) {
+            return ERROR;
+        }
     }
     g->num_edges=0;
     while(fscanf(fin, "%ld %ld", &id1, &id2) == 2){
-        if(!graph_newEdge(g, id1, id2)){
+        if(graph_newEdge(g, id1, id2) == ERROR){
             return ERROR;
         }    
     }

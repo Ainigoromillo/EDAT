@@ -45,10 +45,12 @@ clean:
 run:
 	@echo ">>>>>>Running p1_e1"
 	./p1_e1
+	
 	@echo ">>>>>>Running p1_e2"
 	./p1_e2 
 	@echo ">>>>>>Running p1_e3"
 	./p1_e3 g1.txt
+	
 
 runv:
 	@echo ">>>>>>Running p1_e1 with valgrind"

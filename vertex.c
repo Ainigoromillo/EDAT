@@ -80,8 +80,8 @@ void vertex_free (void * v){
   free(w);
 }
 long vertex_getId (const Vertex * v){
-  long id = v->id;
   if(!v) return -1;
+  long id = v->id;
   return id;
 }
 const char* vertex_getTag (const Vertex * v){
