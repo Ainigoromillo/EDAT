@@ -56,10 +56,10 @@ void graph_free(Graph *g){
 Status graph_newVertex(Graph *g, char *desc){
     if(!g) return ERROR;
     int i,j = 0;
-    Vertex *Nvertex = NULL;
-    Nvertex = vertex_initFromString(desc);
+    Vertex *newVertex = NULL;
+    newVertex = vertex_initFromString(desc);
     for(i = 0; i < g->num_vertices; i++){
-        if(vertex_getId(Nvertex) == vertex_getId(g->vertices[i])){ 
+        if(vertex_getId(newVertex) == vertex_getId(g->vertices[i])){ /*Checks if the vertex is already created*/
             j = 1;
             break;}
     }
@@ -67,7 +67,7 @@ Status graph_newVertex(Graph *g, char *desc){
         return OK;
     }
     g->num_vertices ++;
-    g->vertices[g->num_vertices - 1] = Nvertex;
+    g->vertices[g->num_vertices - 1] = newVertex;
     return OK;
 }
 
@@ -138,7 +138,7 @@ int graph_getNumberOfVertices(const Graph *g){
 }
 
 /**
- * @brief Returns the total number of edges  * in the graph.
+ * @brief Returns the total number of edges in the graph.
  *
  * @param g Pointer to the graph.
  *
@@ -146,7 +146,7 @@ int graph_getNumberOfVertices(const Graph *g){
  * there is any error.
  **/
 int graph_getNumberOfEdges(const Graph *g){
-    if(!g) return ERROR;
+    if(!g) return -1;
     return g->num_edges;
 }
 
@@ -200,16 +200,19 @@ long *graph_getConnectionsFromId(const Graph *g, long id){
     Bool found=FALSE;
     long *connections;
     
-    for(vtx_pos=0;vtx_pos<g->num_vertices && !found;vtx_pos++){
+    /*Makes sure the vertex is in the graph*/
+    for(i=0;i<g->num_vertices && !found;i++){
         if(id == vertex_getId(g->vertices[vtx_pos])){
+            vtx_pos=i;
             found=TRUE;
         }
     }
+    if(!found)return NULL;
                             /*Pongo sizeof(long) o sizeof(vertex_getId(un vértice cualquiera))*/ 
     connections = (long *)calloc(sizeof(long), graph_getNumberOfConnectionsFromId(g, id));
 
     for(i=0;i<g->num_vertices;i++){/*En la fila del vértice que tiene el tag que se nos ha pasado como argumento, vamos recorriendo los vértices para ver cuál está conectado con ese. Como las posiciones en esa fila son iguales que en el array de vértices de g, usamos ese mismo índice para guardar el Id del vértice conectado en el array connections */
-        if(g->connections[vtx_pos][i] > 0){
+        if(g->connections[vtx_pos][i] > 0){ /*Usamos la variable array_index para llevar la cuenta del número de elementos que hemos metido en connections*/
             connections[array_index] = vertex_getId(g->vertices[i]);
             array_index++;
         }
@@ -249,11 +252,13 @@ long *graph_getConnectionsFromTag(const Graph *g, char *tag){
     Bool found=FALSE;
     long *connections;
     
-    for(vtx_pos=0;vtx_pos<g->num_vertices && !found;vtx_pos++){
-        if(strcmp(vertex_getTag(g->vertices[vtx_pos]), tag)){
+    for(i=0;i<g->num_vertices && !found;i++){
+        if(strcmp(vertex_getTag(g->vertices[i]), tag)){
+            vtx_pos=i;
             found=TRUE;
         }
     }
+    if(!found)return NULL;
                             /*Pongo sizeof(long) o sizeof(vertex_getId(un vértice cualquiera))*/ 
     connections = (long *)calloc(sizeof(long), graph_getNumberOfConnectionsFromTag(g, tag));
 
@@ -323,7 +328,7 @@ Status graph_readFromFile (FILE *fin, Graph *g){
     int i;
     long id1, id2;
     char line[MAX_CHARS_IN_LINE];
-    fscanf(fin, "%d\n", &g->num_vertices);
+    fscanf(fin, "%d\n", &(g->num_vertices));
     for(i=0;i<g->num_vertices;i++){
         fgets(line, MAX_CHARS_IN_LINE, fin);
         graph_newVertex(g, line);
