@@ -15,7 +15,7 @@ int main()
         printf("Error");
     }
 
-    if(graph_newEdge(g, 111,222 ) == ERROR){
+    if(graph_newEdge(g, 222,111 ) == ERROR){
         return ERROR;
     }
 
@@ -47,11 +47,12 @@ int main()
         graph_free(g);
         return 1;
     }
+    printf("connections from Toledo: ");
     for (int i = 0; i < graph_getNumberOfConnectionsFromTag(g, "Toledo"); i++)
     {
         printf("%ld", array[i]);
     }
-
+    printf("\nGraph:\n");
     graph_print(stdout, g);
     free(array);
     graph_free(g);
