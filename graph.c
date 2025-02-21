@@ -383,7 +383,7 @@ Status graph_readFromFile (FILE *fin, Graph *g){
     long id1, id2;
     char line[MAX_CHARS_IN_LINE];
     fscanf(fin, "%d", &(g->num_vertices));
-    fgetc(fin);
+    printf("g->num_vertices : %d",g->num_vertices);
     for(i=0;i<g->num_vertices;i++){
         if (!fgets(line, MAX_CHARS_IN_LINE, fin)) {
             return ERROR;
