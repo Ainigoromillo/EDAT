@@ -5,11 +5,17 @@
 
 int main(int argc,char *argv[]){
     Graph *g = graph_init();
+    if(!g ){
+        printf("Error en graph_init");
+        return 1;
+    }
     FILE *f = fopen(argv[1],"r");
-    int d = 0;
-    /*graph_readFromFile(f,g);*/
-    fscanf(f, "%d", &d);
-    printf("g->num_vertices : %d",d);
+    if(!f){
+        printf("Error en fopen");
+        graph_free(g);
+        return 1;
+    }
+    graph_readFromFile(f,g);
     graph_print(stdout,g);
     fclose(f);
     graph_free(g);

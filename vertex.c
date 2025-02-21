@@ -166,11 +166,8 @@ sum++;
 */
 int vertex_print (FILE * pf, const void * v){
 int sum = 0;
-char id[TAG_LENGTH];
 Vertex *w = (Vertex *)v;
 if(!v) return -1;
-fprintf(pf,"[%ld,%s,%d]",vertex_getId(w),vertex_getTag(w),vertex_getState(w));
-sprintf(id,"%ld",w->id);
-sum = strlen(id) + strlen(w->tag) + 1;
+sum = fprintf(pf,"[%ld,%s,%d]",vertex_getId(w),vertex_getTag(w),vertex_getState(w));
 return sum;
 }
