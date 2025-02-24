@@ -446,6 +446,9 @@ Status graph_readFromFile(FILE *fin, Graph *g)
     fgets(line, MAX_CHARS_IN_LINE, fin);
     t = (int)(line[0] - '0');
 
+    if(t<=0 || t>MAX_VTX){
+        return ERROR;
+    }
     for (i = 0; i < t; i++)
     {
         if (!fgets(line, MAX_CHARS_IN_LINE, fin))
