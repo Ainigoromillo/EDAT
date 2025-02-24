@@ -444,7 +444,7 @@ Status graph_readFromFile(FILE *fin, Graph *g)
     char line[MAX_CHARS_IN_LINE];
 
     fgets(line, MAX_CHARS_IN_LINE, fin);
-    t = (int)(line[0] - '0');
+    t = atoi(line);
 
     for (i = 0; i < t; i++)
     {
