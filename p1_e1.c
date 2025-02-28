@@ -3,7 +3,7 @@
 #include "vertex.h"
 
 int main(){
-    Vertex *v, *w,*t;
+    Vertex *v=NULL, *w=NULL,*t=NULL;
     v = vertex_init();
     w = vertex_init();
     vertex_setId(v,10);
