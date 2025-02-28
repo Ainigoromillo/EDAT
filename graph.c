@@ -127,10 +127,13 @@ Bool graph_connectionExists(const Graph *g, long orig, long dest)
     int i, origen = -1, destino = -1;
     for (i = 0; i < g->num_vertices; i++)
     {
-        if (vertex_getId(g->vertices[i]) == orig)
+        if (vertex_getId(g->vertices[i]) == orig){
             origen = i;
-        if (vertex_getId(g->vertices[i]) == destino)
+        }
+            
+        if (vertex_getId(g->vertices[i]) == dest){
             destino = i;
+        }
     }
     if (origen == -1 || destino == -1)
     {

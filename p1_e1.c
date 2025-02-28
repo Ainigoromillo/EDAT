@@ -2,15 +2,8 @@
 #include <stdio.h>
 #include "vertex.h"
 
-<<<<<<< HEAD
 int main(){
     Vertex *v=NULL, *w=NULL,*t=NULL;
-=======
-int main()
-{
-    Vertex *v, *w, *t;
-
->>>>>>> fd59bc5b835cb6b17c4b0cc07d4e73e957d65e6d
     v = vertex_init();
     w = vertex_init();
     

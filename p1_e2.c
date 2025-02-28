@@ -7,22 +7,27 @@ int main()
 {
     Graph *g = graph_init();
     long *array;
-
+    printf("Inserting Madrid...");
     if (!graph_newVertex(g, "id:111 tag:Madrid state:WHITE"))
     {
-        printf("Ha habido un error");
+        printf("result...:0");
+    }else{
+        printf("result...:1");
     }
+    printf("\nInserting Toledo...");
     if (!(graph_newVertex(g, "id:222 tag:Toledo state:WHITE")))
     {
-        printf("Error");
+        printf("result...:0");
+    }else{
+        printf("result...:1");
     }
-
+    printf("\nInserting edge: 222 -> 111");
     if (graph_newEdge(g, 222, 111) == ERROR)
     {
         return ERROR;
     }
 
-    printf("111 --> 222? :");
+    printf("\n111 --> 222? :");
     if (graph_connectionExists(g, 111, 222))
     {
         printf("Yes\n");
