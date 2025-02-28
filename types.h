@@ -18,7 +18,7 @@
  */
 typedef enum {
     FALSE=0, /*!< False value */
-    TRUE=1  /*!< True value  */
+    TRUE=1   /*!< True value  */
 } Bool;
 
 /** 

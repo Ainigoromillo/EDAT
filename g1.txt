@@ -1,8 +1,8 @@
 4
-id:100 tag:Madrid
-id:200 tag:Toledo
-id:300 tag:Avila
-id:400 tag:Segovia
+id:100 tag:Madrid state:0
+id:200 tag:Toledo state:0
+id:300 tag:Avila state:0
+id:400 tag:Segovia state:0
 100 200
 100 300
 200 400
