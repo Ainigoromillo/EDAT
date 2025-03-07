@@ -99,16 +99,30 @@ int float_print(FILE *f,const void *num){
     return 0;
 }
 
+void free_all(Stack *s1, Stack *s2, Stack *s3, float *arr1, float *arr2){
+    if(s1){
+        stack_free(s1);
+    }
+    if(s2){
+        stack_free(s2);
+    }
+    if(s3){
+        stack_free(s3);
+    }
+    if(arr1){
+        free(arr1);
+    }
+    if(arr2){
+        free(arr2);
+    }
+}
+
 int main(int argc, char *argv[]){
     char txt_extension[] = ".txt";
-    FILE *f;
-    float *gradeArray1, *gradeArray2;
+    FILE *f=NULL;
+    float *gradeArray1=NULL, *gradeArray2=NULL;
     int i, num_elements=0;
-<<<<<<< HEAD
-    Stack *st1, *st2, *final_stack;
-=======
-    Stack *st1, *st2, *sout = NULL;
->>>>>>> 292e6bb512e76fd7dd7676e6b923c7a6de39bbab
+    Stack *st1=NULL, *st2=NULL, *sout = NULL;
 
     if(!(st1 = stack_init())){
         return 1;
@@ -150,8 +164,7 @@ int main(int argc, char *argv[]){
     for(i=0;i<num_elements;i++){
         fscanf(f,"%f", &(gradeArray1[i]));
         if(!(stack_push(st1, ((void *)(&gradeArray1[i]))))){
-            stack_free(st1);
-            stack_free(st2);
+            free_all(st1, st2, sout, gradeArray1, gradeArray2);
             printf("Error pushing element to st1");
         }
     }
@@ -175,9 +188,7 @@ int main(int argc, char *argv[]){
     for(i=0;i<num_elements;i++){
         fscanf(f,"%f", &(gradeArray2[i]));
         if(!(stack_push(st2, ((void *)(&gradeArray2[i]))))){
-            free(gradeArray1);
-            stack_free(st1);
-            stack_free(st2);
+            free_all(st1, st2, sout, gradeArray1, gradeArray2);
             printf("Error pushing element to st2");
         }
     }
@@ -186,32 +197,15 @@ int main(int argc, char *argv[]){
     stack_print(stdout, st1, float_print);
     stack_print(stdout, st2, float_print);
 
-<<<<<<< HEAD
-
-    if(!(final_stack = stack_init())){
-        return 1;
-    }
-    final_stack = merge_stack();
-=======
     if(!(sout = stack_init())){
-        free(gradeArray1);
-        free(gradeArray2);
-        free(st1);
-        free(st2);
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
     if(mergeStacks(st1,st2, sout, float_cmp) == ERROR){
-        free(gradeArray1);
-        free(gradeArray2);
-        free(st1);
-        free(st2);
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
     printf("Joint Ranking: \n");
     stack_print(stdout,sout,float_print);
->>>>>>> 292e6bb512e76fd7dd7676e6b923c7a6de39bbab
-    free(gradeArray1);
-    free(gradeArray2);
-    free(st1);
-    free(st2);
+    free_all(st1, st2, sout, gradeArray1, gradeArray2);
 }
