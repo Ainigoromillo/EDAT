@@ -3,6 +3,8 @@
 
 #include "types.h"
 #include <stdlib.h>
+#include <stdio.h>
+
 
 
 /* function type to convert strings to elements of the appropriate type */
