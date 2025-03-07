@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
     FILE *f;
     float grade, *gradeArray1, *gradeArray2;
     int i, num_elements=0;
-    Stack *st1, *st2;
+    Stack *st1, *st2, *final_stack;
 
     if(!(st1 = stack_init())){
         return 1;
@@ -95,6 +95,11 @@ int main(int argc, char *argv[]){
     stack_print(stdout, st1, float_print);
     stack_print(stdout, st2, float_print);
 
+
+    if(!(final_stack = stack_init())){
+        return 1;
+    }
+    final_stack = merge_stack();
     free(gradeArray1);
     free(gradeArray2);
     free(st1);
