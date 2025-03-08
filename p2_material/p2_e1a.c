@@ -30,7 +30,7 @@ int float_cmp(const void *a, const void *b);
  * @param b 
  * @return int 
  */
-int vertex_cmp(const void *a, const void *b);
+
 
 int float_print(FILE *f,const void *num);
 Status mergeStacks (Stack *sin1, Stack *sin2, Stack *sout, P_stack_ele_cmp f){
@@ -75,21 +75,6 @@ int float_cmp(const void *a, const void *b){
     return 0;
 }
 
-int Vertex_cmp(const void *a, const void *b){
-    Vertex *vertex1 = NULL, *vertex2 = NULL;
-    long id1, id2;
-    vertex1 = (Vertex *)a;
-    vertex2 = (Vertex *)b;
-    id1 = vertex_getId(vertex1);
-    id2 = vertex_getId(vertex2);
-    if(id1 > id2){
-        return 1;
-    }
-    if(id1 < id2){
-        return -1;
-    }
-    return 0;
-}
 
 int float_print(FILE *f,const void *num){
     if(!f || !num){
