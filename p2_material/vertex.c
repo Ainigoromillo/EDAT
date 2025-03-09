@@ -36,9 +36,10 @@ Status vertex_setField(Vertex *v, char *key, char *value)
 #define TAG_LENGTH 64
 struct _Vertex
 {
-  long id;
-  char tag[TAG_LENGTH];
-  Label state;
+  long id;              /*<!Identificator of the vertex*/
+  char tag[TAG_LENGTH]; /*<!Name/tag of the vertex*/
+  Label state;          /*<!State (White, Black, or Gray) of the vertex*/
+  int index;            /*<!Position of vertex inside graph*/
 };
 
 Vertex *vertex_init()
@@ -179,6 +180,7 @@ void *vertex_copy(const void *src)
   Vertex *wsrc = (Vertex *)src;
   w1->id = wsrc->id;
   w1->state = wsrc->state;
+  w1->index = wsrc->index;
   strcpy(w1->tag, wsrc->tag);
   return (void *)w1;
 }
@@ -189,6 +191,22 @@ int vertex_print(FILE *pf, const void *v)
   Vertex *w = (Vertex *)v;
   if (!v)
     return -1;
-  sum = fprintf(pf, "[%ld,%s,%d]", vertex_getId(w), vertex_getTag(w), vertex_getState(w));
+  sum = fprintf(pf, "[%ld,%s,%d, %d]", vertex_getId(w), vertex_getTag(w), vertex_getState(w), vertex_getIndex(v));
   return sum;
+}
+
+Status vertex_setIndex(Vertex *v, int index){
+  if(!v || index < 1){
+    return ERROR;
+  }
+
+  v->index = index;
+  return OK;
+}
+
+int vertex_getIndex(Vertex *v){
+  if(!v){
+    return -1;
+  }
+  return v->index;
 }

@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX_CHARS_IN_LINE 100
+
 /** 
  * @brief Label to characterize the vertex state (to be used in P2)
  *
@@ -219,4 +221,23 @@ void * vertex_copy (const void * src);
  */
 int vertex_print (FILE * pf, const void * v);
 
+/**
+ * @brief sets the index of the vertex
+ * 
+ * @param v pointer to the vertex
+ * @param index new index of the vertex
+ * @return Status: returns OK or ERROR in case of error.
+ */
+Status vertex_setIndex(Vertex *v, int index);
+
+/**
+ * @brief gets the index of a vertex
+ * 
+ * @param v pointer to the vertex
+ * @return the vertex' index
+ */
+int vertex_getIndex(Vertex *v);
+
+
 #endif /* VERTEX_H_ */
+

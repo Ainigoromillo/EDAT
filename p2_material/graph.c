@@ -2,15 +2,70 @@
 #include <stdlib.h>
 #include <string.h>
 #include "graph.h"
+#include "stack.h"
 #define MAX_VTX 4096
 struct _Graph
 {
-    Vertex *vertices[MAX_VTX];
-    Bool connections[MAX_VTX][MAX_VTX];
-    int num_vertices;
-    int num_edges;
+    Vertex *vertices[MAX_VTX];          /*<!Array of pointers to vertex*/
+    Bool connections[MAX_VTX][MAX_VTX]; /*<!Matrix with connections of the vertex*/
+    int num_vertices;                   /*<!Number of vertex in the graph*/
+    int num_edges;                      /*<!Number of edges in the graph*/
 };
 
+/*PRIVATE FUNCTIONS*/
+/**
+ * @brief returns index of vertex with a determined tag
+ * 
+ * @param g pointer to the graph
+ * @param tag tag of the pointer
+ * @return int index of the pointer
+ */
+int _graph_findVertexByTag(const Graph *g, char *tag);
+
+/**
+ * @brief returns pointer to the vertex with a determined id in a graph
+ * 
+ * @param g pointer to the graph
+ * @param id id of the desired vertex
+ * @return Vertex* pointer to the found vertex
+ */
+Vertex *_graph_findVertexById(const Graph *g, long id);
+
+/**
+ * @brief inserts a new edge from the indexes of the two connected vertices
+ * 
+ * @param g pointer to the graph
+ * @param origIx index of the origin vertex
+ * @param destIx index of the destination vertex
+ * @return Status OK or ERROR
+ */
+Status _graph_insertEdgeFromIndices(Graph *g, const long origIx, const long destIx);
+
+/**
+ * @brief returns the number of connections the vertex with index ix has
+ * 
+ * @param g pointer to the graph
+ * @param ix index of the vertex
+ * @return int the number of connections the vertex has
+ */
+int _graph_getNumConnections(const Graph *g, int ix);
+
+/**
+ * @brief returns an array with the connections the vertex with index ix has
+ * 
+ * @param g pointer to the graph
+ * @param ix index of the vertex
+ * @return long* array with the connections of the vertex
+ */
+long *_graph_get_connections(const Graph *g, int ix);
+/**
+ * @brief sets all vertices of a graph to a determined state
+ * 
+ * @param g pointer to the graph
+ * @param l the new state of the vertices
+ */
+void _graph_setVertexState (Graph *g, Label l);
+/*END OF PRIVATE FUNCTIONS*/
 
 Graph *graph_init()
 {
@@ -23,7 +78,6 @@ Graph *graph_init()
     return graph;
 }
 
-
 void graph_free(Graph *g)
 {
     int i;
@@ -34,7 +88,6 @@ void graph_free(Graph *g)
     }
     free(g);
 }
-
 
 Status graph_newVertex(Graph *g, char *desc)
 {
@@ -56,11 +109,13 @@ Status graph_newVertex(Graph *g, char *desc)
     {
         return OK;
     }
+    if(!vertex_setId(newVertex, g->num_vertices)){
+        return ERROR;
+    }
     g->num_vertices++;
     g->vertices[g->num_vertices - 1] = newVertex;
     return OK;
 }
-
 
 Status graph_newEdge(Graph *g, long orig, long dest)
 {
@@ -90,7 +145,6 @@ Status graph_newEdge(Graph *g, long orig, long dest)
     (g->connections[pos_orig][pos_dest])++;
     return OK;
 }
-
 
 Bool graph_contains(const Graph *g, long id)
 {
@@ -316,4 +370,65 @@ Status graph_readFromFile(FILE *fin, Graph *g)
     }
 
     return OK;
+}
+
+Status graph_depthSearch(Graph *g, long from_id, long to_id){
+    int i;
+    Status st=OK;
+    Stack *s;
+    Vertex *vf, *vt, *v0;
+    long *adj_vert;
+
+    if(!g || !from_id || !to_id){
+        return ERROR;
+    }
+    _graph_setVertexState(g, WHITE);
+    st=OK;
+    s=stack_init();
+    vf = _graph_findVertexById(g, from_id);
+    if(!(vertex_setState(vf, BLACK))){
+        return ERROR;
+    }
+    if(!stack_push(s, (void *)vf)){
+        return ERROR;
+    }
+    while(stack_isEmpty(s)==FALSE && st==OK){
+        v0 = (Vertex *)stack_pop(s);
+        if(!vertex_cmp(v0, vt)){
+            st=END;
+        }else{
+            adj_vert = graph_getConnectionsFromId(g, vertex_getId(v0));
+            for(i=0;i<graph_getNumberOfConnectionsFromId(g, vertex_getId(v0));i++){
+                v0 = _graph_findVertexById(g, adj_vert[i]);
+                if(!v0){
+                    free(adj_vert);
+                    return ERROR;
+                }
+                if(vertex_getState(v0)==WHITE){
+                    vertex_setState(v0, BLACK);
+                    if(!(stack_push(s, (void *)v0))){
+                        free(adj_vert);
+                        return ERROR;
+                    }
+                }
+            }
+            free(adj_vert);
+        }
+    }
+    stack_free(s);
+    return st;
+}
+
+long *_graph_get_connections(const Graph *g, int ix){
+    if(!g || ix<=0){
+        return NULL;
+    }
+    return graph_getConnectionsFromId(g, vertex_getId(g->vertices[ix]));
+}
+
+int _graph_getNumConnections(const Graph *g, int ix){
+    if(!g || ix<=0){
+        return -1;
+    }
+    return graph_getNumberOfConnectionsFromId(g, vertex_getId(g->vertices[ix]));
 }
