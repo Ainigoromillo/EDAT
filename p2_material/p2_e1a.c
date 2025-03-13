@@ -3,6 +3,7 @@
 #include "stack.h"
 #include "vertex.h"
 #include <string.h>
+#include "file_utils.h"
 #define EXTENSION_LENGTH 4
 
 
@@ -22,8 +23,11 @@ Status mergeStacks (Stack *sin1, Stack *sin2, Stack *sout, P_stack_ele_cmp f);
  * @param b 
  * @return int 
  */
+
+ /*
 int float_cmp(const void *a, const void *b);
-/**
+*/
+/*
  * @brief Compares two vertex and returns a negative number if a(id) < b(id), positive if a(id) > b(id) and 0 if a(id) == b(id)
  * 
  * @param a 
@@ -31,8 +35,10 @@ int float_cmp(const void *a, const void *b);
  * @return int 
  */
 
-
+/*
 int float_print(FILE *f,const void *num);
+
+*/
 Status mergeStacks (Stack *sin1, Stack *sin2, Stack *sout, P_stack_ele_cmp f){
     void *e = NULL;
     Stack *st = NULL;
@@ -64,7 +70,7 @@ Status mergeStacks (Stack *sin1, Stack *sin2, Stack *sout, P_stack_ele_cmp f){
     return OK;
     
 }
-
+/*
 int float_cmp(const void *a, const void *b){
     if(*(float *)a > *(float *)b){
         return 1;
@@ -74,8 +80,8 @@ int float_cmp(const void *a, const void *b){
     }
     return 0;
 }
-
-
+*/
+/*
 int float_print(FILE *f,const void *num){
     if(!f || !num){
         return 1;
@@ -83,6 +89,7 @@ int float_print(FILE *f,const void *num){
     fprintf(f,"%f", *((float *)num));
     return 0;
 }
+    */
 
 void free_all(Stack *s1, Stack *s2, Stack *s3, float *arr1, float *arr2){
     if(s1){

@@ -12,7 +12,7 @@ all: p2_e1a p2_e1b
 p2_e1a: $(OBJECTSP2E1A)
 	$(CC) $(CFLAGS) -o p2_e1a $(OBJECTSP2E1A) -L./ -lstack
 
-p2_e1a.o: p2_e1a.c stack.h types.h vertex.h
+p2_e1a.o: p2_e1a.c stack.h types.h vertex.h file_utils.h
 	$(CC) $(CFLAGS) -c p2_e1a.c
 
 vertex.o: vertex.c vertex.h
