@@ -24,9 +24,9 @@ Status mergeStacks (Stack *sin1, Stack *sin2, Stack *sout, P_stack_ele_cmp f);
  * @return int 
  */
 
- /*
+ 
 int float_cmp(const void *a, const void *b);
-*/
+
 /*
  * @brief Compares two vertex and returns a negative number if a(id) < b(id), positive if a(id) > b(id) and 0 if a(id) == b(id)
  * 
@@ -35,10 +35,10 @@ int float_cmp(const void *a, const void *b);
  * @return int 
  */
 
-/*
+
 int float_print(FILE *f,const void *num);
 
-*/
+
 Status mergeStacks (Stack *sin1, Stack *sin2, Stack *sout, P_stack_ele_cmp f){
     void *e = NULL;
     Stack *st = NULL;
