@@ -3,6 +3,7 @@
 #include <string.h>
 #include "graph.h"
 #define MAX_VTX 4096
+#define MAX_CHARS_IN_LINE 50
 struct _Graph
 {
     Vertex *vertices[MAX_VTX];
@@ -68,7 +69,6 @@ Status graph_newEdge(Graph *g, long orig, long dest)
     int pos_orig = -1, pos_dest = -1;
     if (!graph_contains(g, orig) || !graph_contains(g, dest))
     {
-        printf("error en la primera comprobacion");
         return ERROR;
     }
     for (int i = 0; i < g->num_vertices && !found; i++)

@@ -48,6 +48,7 @@ Vertex *vertex_init()
   v = (Vertex *)calloc(1, sizeof(Vertex));
   if (!(v))
     return NULL;
+  v->index = -1;
   return v;
 }
 
@@ -191,7 +192,7 @@ int vertex_print(FILE *pf, const void *v)
   Vertex *w = (Vertex *)v;
   if (!v)
     return -1;
-  sum = fprintf(pf, "[%ld,%s,%d, %d]", vertex_getId(w), vertex_getTag(w), vertex_getState(w), vertex_getIndex(v));
+  sum = fprintf(pf, "[%ld,%s,%d,%d]", vertex_getId(w), vertex_getTag(w), vertex_getState(w), vertex_getIndex(v));
   return sum;
 }
 
@@ -204,7 +205,7 @@ Status vertex_setIndex(Vertex *v, int index){
   return OK;
 }
 
-int vertex_getIndex(Vertex *v){
+int vertex_getIndex(const Vertex *v){
   if(!v){
     return -1;
   }

@@ -124,7 +124,7 @@ int main(int argc, char *argv[]){
 
 
     if(argc != 3){
-        printf("Error con el numero de argumentos: el formato de los argumentos debe ser: ""file1.txt file2.txt """);
+        printf("Error con el número de argumentos. El formato de los argumentos debe ser: ""file1.txt file2.txt """);
         return 1;
     }
 

@@ -236,7 +236,7 @@ Status vertex_setIndex(Vertex *v, int index);
  * @param v pointer to the vertex
  * @return the vertex' index
  */
-int vertex_getIndex(Vertex *v);
+int vertex_getIndex(const Vertex *v);
 
 
 #endif /* VERTEX_H_ */
