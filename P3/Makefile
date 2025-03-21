@@ -34,5 +34,5 @@ run:
 	
 runv:
 	@echo ">>>>>>Running p3_e1 with valgrind"
-	valgrind --leak-check=full ./p3_e1
+	valgrind --leak-check=full ./p3_e1 requests.txt
 	

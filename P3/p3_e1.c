@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
 
     fscanf(pf, "%d", &num);
     fgets(str, MAX_CHARS_IN_LINE, pf);
-    
+
     for(i = 0; i < num; i++){
         if(fgets(str, MAX_LINE_TAM, pf) == NULL){
             return 1;
@@ -53,6 +53,7 @@ int main(int argc, char *argv[]){
     delivery_run_plan(stdout, delivery, vertex_print, vertex_free);
 
     delivery_free(delivery);
+    fclose(pf);
     return 0;
 
 }

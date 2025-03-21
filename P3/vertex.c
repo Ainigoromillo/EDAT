@@ -96,9 +96,10 @@ void vertex_free(void *v)
 }
 long vertex_getId(const Vertex *v)
 {
+  long id = v->id;
   if (!v)
     return -1;
-  long id = v->id;
+  
   return id;
 }
 const char *vertex_getTag(const Vertex *v)
@@ -109,9 +110,10 @@ const char *vertex_getTag(const Vertex *v)
 }
 Label vertex_getState(const Vertex *v)
 {
+  Label state;
   if (!v)
     return ERROR_VERTEX;
-  Label state;
+  
   state = v->state;
   return state;
 }
@@ -147,11 +149,12 @@ Status vertex_setState(Vertex *v, const Label state)
 
 int vertex_cmp(const void *v1, const void *v2)
 {
+  Vertex *w1, *w2;
   if (!v1 || !v2)
   {
     return 0;
   }
-  Vertex *w1, *w2;
+  
   w1 = (Vertex *)v1;
   w2 = (Vertex *)v2;
 
@@ -171,13 +174,14 @@ int vertex_cmp(const void *v1, const void *v2)
 
 void *vertex_copy(const void *src)
 {
+  Vertex *w1 = NULL, *wsrc = NULL;
   if (!src)
   {
     return NULL;
   }
-  Vertex *w1;
+  
   w1 = vertex_init();
-  Vertex *wsrc = (Vertex *)src;
+  wsrc = (Vertex *)src;
   w1->id = wsrc->id;
   w1->state = wsrc->state;
   w1->index = wsrc->index;
