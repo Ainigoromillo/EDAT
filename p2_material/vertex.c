@@ -31,9 +31,7 @@ Status vertex_setField(Vertex *v, char *key, char *value)
 
 /*----------------------------------------------------------------------------------------*/
 /*
- *Definicion de la estructura Vertex declarada en vertex.h
- */
-#define TAG_LENGTH 64
+ *Definicion de la estructura Vertex declarada en vertex.h*/
 struct _Vertex
 {
   long id;              /*<!Identificator of the vertex*/
@@ -49,12 +47,15 @@ Vertex *vertex_init()
   if (!(v))
     return NULL;
   v->index = -1;
+  v->state=WHITE;
+  v->id = 0;
+  v->tag[0] = '\0';
   return v;
 }
 
 Vertex *vertex_initFromString(char *descr)
 {
-  char buffer[1024];
+  char buffer[BUFFER_SIZE];
   char *token;
   char *key;
   char *value;
@@ -90,32 +91,36 @@ Vertex *vertex_initFromString(char *descr)
 
   return v;
 }
+
 void vertex_free(void *v)
 {
   Vertex *w = (Vertex *)v;
   free(w);
 }
+
 long vertex_getId(const Vertex *v)
 {
   if (!v)
     return -1;
-  long id = v->id;
-  return id;
+  return v->id;
 }
+
 const char *vertex_getTag(const Vertex *v)
 {
   if (!v)
     return NULL;
   return v->tag;
 }
+
 Label vertex_getState(const Vertex *v)
 {
+  Label state;
   if (!v)
     return ERROR_VERTEX;
-  Label state;
   state = v->state;
   return state;
 }
+
 Status vertex_setId(Vertex *v, const long id)
 {
   if (!v)
@@ -132,7 +137,9 @@ Status vertex_setTag(Vertex *v, const char *tag)
   {
     return ERROR;
   }
-  strcpy(v->tag, tag);
+
+  strncpy(v->tag, tag, TAG_LENGTH - 1);
+  v->tag[TAG_LENGTH - 1] = '\0';
   return OK;
 }
 
@@ -148,11 +155,11 @@ Status vertex_setState(Vertex *v, const Label state)
 
 int vertex_cmp(const void *v1, const void *v2)
 {
+  Vertex *w1, *w2;
   if (!v1 || !v2)
   {
     return 0;
   }
-  Vertex *w1, *w2;
   w1 = (Vertex *)v1;
   w2 = (Vertex *)v2;
 
@@ -166,23 +173,27 @@ int vertex_cmp(const void *v1, const void *v2)
   }
   else
   {
-    return strcmp(w1->tag, w1->tag);
+    return strcmp(w1->tag, w2->tag);
   }
 }
 
 void *vertex_copy(const void *src)
 {
+  Vertex *w1=NULL, *wsrc=NULL;
   if (!src)
   {
     return NULL;
   }
-  Vertex *w1;
   w1 = vertex_init();
-  Vertex *wsrc = (Vertex *)src;
+  if(!w1){
+    return NULL;
+  }
+  wsrc = (Vertex *)src;
   w1->id = wsrc->id;
   w1->state = wsrc->state;
   w1->index = wsrc->index;
-  strcpy(w1->tag, wsrc->tag);
+  strncpy(w1->tag, wsrc->tag, TAG_LENGTH - 1);
+  w1->tag[TAG_LENGTH - 1] = '\0';
   return (void *)w1;
 }
 
@@ -192,12 +203,12 @@ int vertex_print(FILE *pf, const void *v)
   Vertex *w = (Vertex *)v;
   if (!v)
     return -1;
-  sum = fprintf(pf, "[%ld,%s,%d,%d]", vertex_getId(w), vertex_getTag(w), vertex_getState(w), vertex_getIndex(v));
+  sum = fprintf(pf, "[%ld,%s,%d,%d]", vertex_getId(w), vertex_getTag(w), vertex_getState(w), vertex_getIndex(w));
   return sum;
 }
 
 Status vertex_setIndex(Vertex *v, int index){
-  if(!v || index < 1){
+  if(!v || index < 0){
     return ERROR;
   }
 

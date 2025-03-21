@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
     char txt_extension[] = ".txt";
     long from_id, to_id;
     FILE *f=NULL;
+    Graph *g=NULL;
 
     if(argc < 4){
         fprintf(stdout, "./p2_e2 g2.txt id1 id2");
@@ -31,7 +32,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    Graph *g = graph_init();
+    g = graph_init();
     if (!g)
     {
         printf("Error en graph_init");
@@ -51,7 +52,7 @@ int main(int argc, char *argv[])
     graph_print(stdout, g);
     fclose(f);
     
-    printf("\nBFS output: \n");
+    printf("\nBFS output:");
     if(!graph_depthSearch(g, from_id, to_id)){
         printf("\nError in DFS\n");
         return 1;

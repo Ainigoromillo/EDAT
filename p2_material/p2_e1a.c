@@ -81,7 +81,6 @@ int float_cmp(const void *a, const void *b){
     return 0;
 }
 
-
 int float_print(FILE *f,const void *num){
     if(!f || !num){
         return 1;
@@ -120,37 +119,44 @@ int main(int argc, char *argv[]){
     if(!(st1 = stack_init())){
         return 1;
     }else if(!(st2 = stack_init())){
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
 
 
     if(argc != 3){
         printf("Error con el número de argumentos. El formato de los argumentos debe ser: ""file1.txt file2.txt """);
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
 
     if((strcmp(argv[1] + (strlen(argv[1]) - EXTENSION_LENGTH), txt_extension))){
         printf("El formato de los argumentos debe ser: ""file1.txt file2.txt """);
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
 
     if((strcmp(argv[2] + (strlen(argv[2]) - EXTENSION_LENGTH), txt_extension))){
         printf("El formato de los argumentos debe ser: ""file1.txt file2.txt """);
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
 
     if(!(f = fopen(argv[1], "r"))){
         printf("Error leyendo el archivo %s", argv[1]);
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
     fscanf(f, "%d", &num_elements);
 
     if(!num_elements){
         printf("File ""%s"" is empty;", argv[1]);
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
 
     if(!(gradeArray1 = (float *)calloc(num_elements, sizeof(float)))){
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
 
@@ -167,16 +173,19 @@ int main(int argc, char *argv[]){
 
     if(!(f = fopen(argv[2], "r"))){
         printf("Error leyendo el archivo %s", argv[2]);
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
     fscanf(f, "%d", &num_elements);
 
     if(!num_elements){
         printf("File ""%s"" is empty;", argv[2]);
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
 
     if(!(gradeArray2 = (float *)calloc(num_elements, sizeof(float)))){
+        free_all(st1, st2, sout, gradeArray1, gradeArray2);
         return 1;
     }
 
@@ -205,4 +214,6 @@ int main(int argc, char *argv[]){
     printf("Joint Ranking: \n");
     stack_print(stdout,sout,float_print);
     free_all(st1, st2, sout, gradeArray1, gradeArray2);
+
+    return 0;
 }
