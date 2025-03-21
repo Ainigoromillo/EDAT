@@ -1,7 +1,7 @@
 ########################################################
 CC=gcc
-CFLAGS= -g -Wall -pedantic
-EJS = p2_e1a p2_e1b p2_e3a p2_e3b
+CFLAGS= -g -Wall -pedantic -ansi
+EJS = p2_e1a p2_e1b p2_e2 p2_e3a p2_e3b
 ########################################################
 OBJECTSP2E1A = p2_e1a.o
 OBJECTSP2E1B = p2_e1b.o vertex.o
@@ -66,21 +66,11 @@ run1a:
 
 run1b:
 	@echo ">>>>>> Running p2_e1b"
-	./p2_e1b g1.txt g2.txt
+	./p2_e1b cities1.txt cities2.txt
 
 run2:
 	@echo ">>>>>> Running p2_e2"
 	./p2_e2 g2.txt 100 700
-
-
-runav:
-	@echo ">>>>>> Running p2_e1a with valgrind"
-	valgrind --leak-check=full ./p2_e1a	grades1.txt grades2.txt
-
-runbv:
-	@echo ">>>>>> Running p2_e1b with valgrind"
-	valgrind --leak-check=full ./p2_e1b	g1.txt g2.txt
-
 
 run3a:
 	@echo ">>>>>> Running p2_e3a"
@@ -88,4 +78,25 @@ run3a:
 
 run3b:
 	@echo ">>>>>> Running p2_e3b"
-	./p2_e3b g1.txt g2.txt
+	./p2_e3b cities1.txt cities2.txt
+
+run1av:
+	@echo ">>>>>> Running p2_e1a with valgrind"
+	valgrind --leak-check=full ./p2_e1a	grades1.txt grades2.txt
+
+run1bv:
+	@echo ">>>>>> Running p2_e1b with valgrind"
+	valgrind --leak-check=full ./p2_e1b	cities1.txt cities2.txt
+
+run2v:
+	@echo ">>>>>> Running p2_e2 with valgrind"
+	valgrind --leak-check=full ./p2_e2 g2.txt 100 700
+
+
+run3av:
+	@echo ">>>>>> Running p2_e3a with valgrind"
+	valgrind --leak-check=full ./p2_e3a grades1.txt grades2.txt
+
+run3bv:
+	@echo ">>>>>> Running p2_e3b with valgrind"
+	valgrind --leak-check=full ./p2_e3b cities1.txt cities2.txt

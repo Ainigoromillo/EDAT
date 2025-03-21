@@ -127,7 +127,7 @@ int main(int argc, char *argv[]){
     FILE *f;
     int i, num_elements=0;
     Stack *st1, *st2, *sout = NULL;
-
+    Vertex *v=NULL;
 
     /*Control de errores inicial*/
     if(!(st1 = stack_init())){
@@ -139,16 +139,19 @@ int main(int argc, char *argv[]){
 
     if(argc != 3){
         printf("Error con el numero de argumentos: el formato de los argumentos debe ser: ""file1.txt file2.txt """);
+        free_all(st1, st2, sout);
         return 1;
     }
 
     if((strcmp(argv[1] + (strlen(argv[1]) - EXTENSION_LENGTH), txt_extension))){
         printf("El formato de los argumentos debe ser: ""file1.txt file2.txt """);
+        free_all(st1, st2, sout);
         return 1;
     }
 
     if((strcmp(argv[2] + (strlen(argv[2]) - EXTENSION_LENGTH), txt_extension))){
         printf("El formato de los argumentos debe ser: ""file1.txt file2.txt """);
+        free_all(st1, st2, sout);
         return 1;
     }
 
@@ -157,32 +160,44 @@ int main(int argc, char *argv[]){
 
     if(!(f = fopen(argv[1], "r"))){
         printf("Error leyendo el archivo %s", argv[1]);
+        free_all(st1, st2, sout);
         return 1;
     }
+    
     fscanf(f, "%d\n", &num_elements);
 
     if(!num_elements){
         printf("File ""%s"" is empty;", argv[1]);
+        free_all(st1, st2, sout);
         return 1;
     }
 
     for(i=0;i<num_elements;i++){
         fgets(vertexDescription, MAX_LINE, f);
-        if(!(stack_push(st1, ((void *)(vertex_initFromString(vertexDescription)))))){
+        v = vertex_initFromString(vertexDescription);
+        if(v == NULL){
+            printf("Error creating vertex from file");
+            free_all(st1, st2, sout);
+            return 1;
+        }
+        if(!(stack_push(st1, ((void *)(v))))){
             free_all(st1, st2, sout);
             printf("Error pushing element to st1");
+            return 1;
         }
     }
     fclose(f);
 
     if(!(f = fopen(argv[2], "r"))){
         printf("Error leyendo el archivo %s", argv[2]);
+        free_all(st1, st2, sout);
         return 1;
     }
     fscanf(f, "%d\n", &num_elements);
 
     if(!num_elements){
         printf("File ""%s"" is empty;", argv[2]);
+        free_all(st1, st2, sout);
         return 1;
     }
 
@@ -191,6 +206,7 @@ int main(int argc, char *argv[]){
         if(!(stack_push(st2, ((void *)(vertex_initFromString(vertexDescription)))))){
             free_all(st1, st2, sout);
             printf("Error pushing element to st2");
+            return 1;
         }
     }
     fclose(f);
@@ -211,4 +227,6 @@ int main(int argc, char *argv[]){
     printf("\nJoint Ranking: \n");
     stack_print(stdout,sout,vertex_print);
     free_all(st1, st2, sout);
+
+    return 0;
 }

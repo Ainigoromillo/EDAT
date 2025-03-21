@@ -23,15 +23,17 @@
 #include <stdlib.h>
 
 #define MAX_CHARS_IN_LINE 100
+#define TAG_LENGTH 64
+#define BUFFER_SIZE 1024
 
 /** 
  * @brief Label to characterize the vertex state (to be used in P2)
  *
  **/
 typedef enum {
-    WHITE, /*!< vertex not visited */
-    BLACK,  /*!< vertex visited */
-    ERROR_VERTEX   /*!< not valid vertex */   
+    WHITE,          /*!< vertex not visited */
+    BLACK,          /*!< vertex visited */
+    ERROR_VERTEX    /*!< not valid vertex */   
 } Label;
 
 /** 
@@ -48,7 +50,7 @@ typedef struct _Vertex Vertex;
  * @brief Constructor. Initialize a vertex.
  * 
  * This function allocates memory for a vertex and sets its fields to 
- * id to 0, tag to "" and state to WHITE.
+ * id to 0, tag to "", state to WHITE and index to -1.
  *
  * @code
  * // Example of use
