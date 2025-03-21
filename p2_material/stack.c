@@ -49,9 +49,7 @@ Bool stack_isEmpty(const Stack *s){
 
 Status stack_push(Stack *s, const void *e){
     if(!s  || !s->data) return ERROR;
-    if(s->top == s->capacity){
-        return ERROR;
-    }
+    
     if(stack_is_full(s) == TRUE){
         if(stack_grow(s) == ERROR) return ERROR;
     }
