@@ -5,11 +5,11 @@
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
-      "args": [],
+      "args": ["100", "700"],
       "stopAtEntry": false,
       "externalConsole": true,
       "cwd": "c:/Users/matte/Documents/EDAT/Prácticas/EDAT",
-      "program": "c:/Users/matte/Documents/EDAT/Prácticas/EDAT/build/Debug/outDebug",
+      "program": "c:/Users/matte/Documents/EDAT/Prácticas/EDAT/p2_material/p2_e2",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

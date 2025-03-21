@@ -48,7 +48,7 @@ void graph_free(Graph *g);
  * @return Returns OK if the vertex could be created (or if it exists 
  * already), ERROR otherwise.
  **/
-Status graph_newVertex(Graph *g, char *desc);
+Status graph_newVertex(Graph *g, char *desc, int index);
 
 /**
  * @brief Creates an edge between to vertices of a graph.

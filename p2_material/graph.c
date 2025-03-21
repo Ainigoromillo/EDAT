@@ -3,6 +3,7 @@
 #include <string.h>
 #include "graph.h"
 #include "stack.h"
+#include "types.h"
 #define MAX_VTX 4096
 struct _Graph
 {
@@ -14,59 +15,48 @@ struct _Graph
 
 /*PRIVATE FUNCTIONS*/
 /**
- * @brief returns index of vertex with a determined tag
- * 
- * @param g pointer to the graph
- * @param tag tag of the pointer
- * @return int index of the pointer
- */
-int _graph_findVertexByTag(const Graph *g, char *tag);
-
-/**
- * @brief returns pointer to the vertex with a determined id in a graph
- * 
- * @param g pointer to the graph
- * @param id id of the desired vertex
- * @return Vertex* pointer to the found vertex
- */
-Vertex *_graph_findVertexById(const Graph *g, long id);
-
-/**
- * @brief inserts a new edge from the indexes of the two connected vertices
- * 
- * @param g pointer to the graph
- * @param origIx index of the origin vertex
- * @param destIx index of the destination vertex
- * @return Status OK or ERROR
- */
-Status _graph_insertEdgeFromIndices(Graph *g, const long origIx, const long destIx);
-
-/**
- * @brief returns the number of connections the vertex with index ix has
- * 
- * @param g pointer to the graph
- * @param ix index of the vertex
- * @return int the number of connections the vertex has
- */
-int _graph_getNumConnections(const Graph *g, int ix);
-
-/**
- * @brief returns an array with the connections the vertex with index ix has
- * 
- * @param g pointer to the graph
- * @param ix index of the vertex
- * @return long* array with the connections of the vertex
- */
-long *_graph_get_connections(const Graph *g, int ix);
-/**
  * @brief sets all vertices of a graph to a determined state
  * 
  * @param g pointer to the graph
  * @param l the new state of the vertices
  */
-void _graph_setVertexState (Graph *g, Label l);
+Status _graph_setVertexState (Graph *g, Label l);
+
+/**
+ * @brief returns the vertex with a given Id in the graph
+ * 
+ * @param g pointer to the graph
+ * @param vertexId id of the desired vertex
+ * @return vertex with the given id
+ */
+Vertex *_graph_findVertexById(Graph *g, long id);
 /*END OF PRIVATE FUNCTIONS*/
 
+/*IMPLEMENTATION OF PRIVATE FUNCTIONS*/
+Status _graph_setVertexState (Graph *g, Label l){
+    int i;
+    if(!g) return ERROR;
+
+    for(i=0;i<graph_getNumberOfVertices(g);i++){
+        if(!(vertex_setState(g->vertices[i], l))){
+            return ERROR;
+        }
+    }
+    return OK;
+}
+
+Vertex *_graph_findVertexById(Graph *g, long id){
+    int i;
+    if(!g || !id) return NULL;
+
+    for(i=0;i<graph_getNumberOfVertices(g);i++){
+        if(vertex_getId(g->vertices[i]) == id){
+            return g->vertices[i];
+        }
+    }
+    return NULL;
+}
+/*END OF IMPLEMENTATION OF PRIVATE FUNCTIONS*/
 Graph *graph_init()
 {
     Graph *graph = NULL;
@@ -89,7 +79,7 @@ void graph_free(Graph *g)
     free(g);
 }
 
-Status graph_newVertex(Graph *g, char *desc)
+Status graph_newVertex(Graph *g, char *desc, int index)
 {
     if (!g)
         return ERROR;
@@ -107,13 +97,15 @@ Status graph_newVertex(Graph *g, char *desc)
     }
     if (j == 1)
     {
+        vertex_free(newVertex);
         return OK;
-    }
-    if(!vertex_setId(newVertex, g->num_vertices)){
-        return ERROR;
     }
     g->num_vertices++;
     g->vertices[g->num_vertices - 1] = newVertex;
+    if(!(vertex_setIndex(newVertex, index))){
+        printf("\nError changing index of the vertex");
+        return ERROR;
+    }
     return OK;
 }
 
@@ -121,9 +113,9 @@ Status graph_newEdge(Graph *g, long orig, long dest)
 {
     Bool found = FALSE;
     int pos_orig = -1, pos_dest = -1;
-    if (!graph_contains(g, orig) || !graph_contains(g, dest))
+    if (graph_contains(g, orig) == FALSE || graph_contains(g, dest) == FALSE)
     {
-        printf("error en la primera comprobacion");
+        printf("\nError en la primera comprobación de graph_newEdge");
         return ERROR;
     }
     for (int i = 0; i < g->num_vertices && !found; i++)
@@ -139,6 +131,7 @@ Status graph_newEdge(Graph *g, long orig, long dest)
     }
     if (pos_orig == -1 || pos_dest == -1)
     {
+        printf("\nError in function graph_newEdge");
         return ERROR;
     }
     (g->num_edges)++;
@@ -157,6 +150,7 @@ Bool graph_contains(const Graph *g, long id)
             return TRUE;
         }
     }
+    printf("\nId %ld is not contained in graph", id);
     return FALSE;
 }
 
@@ -218,27 +212,35 @@ int graph_getNumberOfConnectionsFromId(const Graph *g, long id)
 }
 
 long *graph_getConnectionsFromId(const Graph *g, long id)
-{
+{   
+    /**/
     if (!g)
         return NULL;
     int vtx_pos = -1, i, array_index = 0;
-    long *connections;
+    long *connections=NULL;
 
     /*Makes sure the vertex is in the graph*/
     for (i = 0; i < g->num_vertices && vtx_pos == -1; i++)
     {
-        if (id == vertex_getId(g->vertices[vtx_pos]))
+        if (id == vertex_getId(g->vertices[i]))
         {
             vtx_pos = i;
         }
     }
-    if (vtx_pos == -1)
+    if (vtx_pos == -1){
+        printf("Vertex is not in the graph");
         return NULL;
+    }
     /*Pongo sizeof(long) o sizeof(vertex_getId(un vértice cualquiera))*/
     connections = (long *)calloc(sizeof(long), graph_getNumberOfConnectionsFromId(g, id));
+    
+    if(!connections){
+        printf("Error allocating memory");
+        return NULL;
+    }
 
     for (i = 0; i < g->num_vertices; i++)
-    { /*En la fila del vértice que tiene el tag que se nos ha pasado como argumento, vamos recorriendo los vértices para ver cuál está conectado con ese. Como las posiciones en esa fila son iguales que en el array de vértices de g, usamos ese mismo índice para guardar el Id del vértice conectado en el array connections */
+    {   /*En la fila del vértice que tiene el tag que se nos ha pasado como argumento, vamos recorriendo los vértices para ver cuál está conectado con ese. Como las posiciones en esa fila son iguales que en el array de vértices de g, usamos ese mismo índice para guardar el Id del vértice conectado en el array connections */
         if (g->connections[vtx_pos][i] > 0)
         { /*Usamos la variable array_index para llevar la cuenta del número de elementos que hemos metido en connections*/
             connections[array_index] = vertex_getId(g->vertices[i]);
@@ -335,9 +337,10 @@ int graph_print(FILE *pf, const Graph *g)
 
 Status graph_readFromFile(FILE *fin, Graph *g)
 {
-
-    if (!g || !fin)
+    if (!g || !fin){
+        printf("\nError in graph_readFromFile arguments");
         return ERROR;
+    }
     int i, t;
     long id1, id2;
     char line[MAX_CHARS_IN_LINE];
@@ -346,16 +349,19 @@ Status graph_readFromFile(FILE *fin, Graph *g)
     t = atoi(line);
 
     if(t<=0 || t>MAX_VTX){
+        printf("\nError in number of vertices in file");
         return ERROR;
     }
     for (i = 0; i < t; i++)
     {
         if (!fgets(line, MAX_CHARS_IN_LINE, fin))
         {
+            printf("\nError reading line with fgets");
             return ERROR;
         }
-        if (graph_newVertex(g, line) == ERROR)
+        if (graph_newVertex(g, line, i) == ERROR)
         {
+            printf("\nError adding vertex in function graph_readFromFile");
             return ERROR;
         }
     }
@@ -365,6 +371,7 @@ Status graph_readFromFile(FILE *fin, Graph *g)
     {
         if (graph_newEdge(g, id1, id2) == ERROR)
         {
+            printf("\nError adding a new edge in function graph_readFromFile");
             return ERROR;
         }
     }
@@ -375,39 +382,73 @@ Status graph_readFromFile(FILE *fin, Graph *g)
 Status graph_depthSearch(Graph *g, long from_id, long to_id){
     int i;
     Status st=OK;
-    Stack *s;
-    Vertex *vf, *vt, *v0;
-    long *adj_vert;
+    Stack *s=NULL;
+    Vertex *vf=NULL, *vt=NULL, *v0=NULL, *v=NULL;
+    long *adj_vert=NULL;
 
     if(!g || !from_id || !to_id){
         return ERROR;
     }
-    _graph_setVertexState(g, WHITE);
+    if(!(_graph_setVertexState(g, WHITE))){
+        printf("Error setting state of the vertex");
+        return ERROR;
+    }
     st=OK;
     s=stack_init();
+    if(!s){
+        printf("Error creating stack");
+        return ERROR;
+    }
     vf = _graph_findVertexById(g, from_id);
+    vt = _graph_findVertexById(g, to_id);
+
+    printf("\nFrom vertex of BFS: \n");
+    vertex_print(stdout, vf);
+    printf("\nTo vertex of BFS: \n");
+    vertex_print(stdout, vt);
+    printf("\n\n");
+
+    if(!vt || !vf){
+        printf("\nError finding vertices vf and vt in the graph");
+        return ERROR;
+    }
+
     if(!(vertex_setState(vf, BLACK))){
         return ERROR;
     }
     if(!stack_push(s, (void *)vf)){
         return ERROR;
     }
+    
     while(stack_isEmpty(s)==FALSE && st==OK){
         v0 = (Vertex *)stack_pop(s);
-        if(!vertex_cmp(v0, vt)){
+        if(!v0){
+            printf("Error popping element from stack");
+            free(v0);
+            return st=ERROR;
+        }
+        printf("\n");
+        vertex_print(stdout, v0);
+        
+        if(vertex_cmp(v0, vt) == 0){
             st=END;
         }else{
             adj_vert = graph_getConnectionsFromId(g, vertex_getId(v0));
+            if(!adj_vert){
+                printf("\nError getting the array of adjacent id's");
+                return ERROR;
+            }
             for(i=0;i<graph_getNumberOfConnectionsFromId(g, vertex_getId(v0));i++){
-                v0 = _graph_findVertexById(g, adj_vert[i]);
-                if(!v0){
+                v = _graph_findVertexById(g, adj_vert[i]);
+                if(!v){
                     free(adj_vert);
                     return ERROR;
                 }
-                if(vertex_getState(v0)==WHITE){
-                    vertex_setState(v0, BLACK);
-                    if(!(stack_push(s, (void *)v0))){
+                if(vertex_getState(v)==WHITE){
+                    vertex_setState(v, BLACK);
+                    if(!(stack_push(s, (void *)v))){
                         free(adj_vert);
+                        printf("\nError pushing element to stack");
                         return ERROR;
                     }
                 }
