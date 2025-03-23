@@ -288,7 +288,9 @@ Status graph_readFromFile(FILE *fin, Graph *g)
     long id1, id2;
     char line[MAX_CHARS_IN_LINE];
 
-    fgets(line, MAX_CHARS_IN_LINE, fin);
+    if(fgets(line, MAX_CHARS_IN_LINE, fin) == NULL){
+        return ERROR;
+    }
     t = atoi(line);
 
     if(t<=0 || t>MAX_VTX){

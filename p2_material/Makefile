@@ -60,6 +60,17 @@ p2_e3b.o: p2_e1b.c stack.h types.h vertex.h
 clean:
 	rm -rf *.o $(EJS)
 
+run:
+	@echo ">>>>>> Running p2_e1a"
+	./p2_e1a grades1.txt grades2.txt
+	@echo ">>>>>> Running p2_e1b"
+	./p2_e1b cities1.txt cities2.txt
+	@echo ">>>>>> Running p2_e2"
+	./p2_e2 g2.txt 100 700
+	@echo ">>>>>> Running p2_e3a"
+	./p2_e3a grades1.txt grades2.txt
+	@echo ">>>>>> Running p2_e3b"
+	./p2_e3b cities1.txt cities2.txt
 run1a:
 	@echo ">>>>>> Running p2_e1a"
 	./p2_e1a grades1.txt grades2.txt

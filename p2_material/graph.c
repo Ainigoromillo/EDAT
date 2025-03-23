@@ -59,12 +59,18 @@ Vertex *_graph_findVertexById(Graph *g, long id){
 /*END OF IMPLEMENTATION OF PRIVATE FUNCTIONS*/
 Graph *graph_init()
 {
+    int i, j;
     Graph *graph = NULL;
     graph = (Graph *)malloc(sizeof(Graph));
     if (!graph)
         return NULL;
     graph->num_vertices = 0;
     graph->num_edges = 0;
+    for(i = 0; i < MAX_VTX; i++){
+        for(j = 0; j < MAX_VTX; j++){
+            graph->connections[i][j] = FALSE;
+        }
+    }
     return graph;
 }
 
@@ -142,7 +148,7 @@ Status graph_newEdge(Graph *g, long orig, long dest)
         return ERROR;
     }
     (g->num_edges)++;
-    (g->connections[pos_orig][pos_dest])++;
+    g->connections[pos_orig][pos_dest] = TRUE;
     return OK;
 }
 
