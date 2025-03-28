@@ -50,3 +50,11 @@ run2a:
 run2av:
 	@echo ">>>>>>Running p3_e2a with valgrind"
 	valgrind --leak-check=full ./p3_e2a requests.txt
+
+run2b:
+	@echo ">>>>>>Running p3_e2b"
+	./p3_e2b city_graph.txt 100 700
+	
+run2av:
+	@echo ">>>>>>Running p3_e2a with valgrind"
+	valgrind --leak-check=full ./p3_e2a requests.txt

@@ -43,6 +43,11 @@ int main(int argc, char*argv[]){
     }
 
     fclose(pf);
+    printf("INPUT GRAPH:\n");
+    graph_print(stdout, graph);
+    printf("--------BFS-------\n");
+    printf("From vertex id: %ld\n To vertex id: %ld", idDest, idOrigin);
+    printf("\nOUTPUT:\n");
     if(graph_breathSearch(graph, idDest, idDest) == ERROR){
         printf("\nERROR IN BFS\n");
     }
