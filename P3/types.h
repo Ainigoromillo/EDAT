@@ -30,4 +30,8 @@ typedef enum {
 END=2
 } Status;
 
+#define EXTENSION_LENGTH 4
+#define MAX_LINE_TAM 255
+#define MAX_NAME 255
+
 #endif /* TYPES_H_ */
