@@ -4,6 +4,8 @@
 #include "graph.h"
 #include "stack.h"
 #include "types.h"
+#include "queue.h"
+
 #define MAX_VTX 4096
 struct _Graph
 {
@@ -481,4 +483,82 @@ int _graph_getNumConnections(const Graph *g, int ix){
         return -1;
     }
     return graph_getNumberOfConnectionsFromId(g, vertex_getId(g->vertices[ix]));
+}
+
+
+Status graph_breathSearch(Graph *g, long from_id, long to_id){
+    int i;
+    Status st=OK;
+    Stack *queue=NULL;
+    Vertex *vf=NULL, *vt=NULL, *v0=NULL, *v=NULL;
+    long *adj_vert=NULL;
+
+    if(!g || !from_id || !to_id){
+        return ERROR;
+    }
+    if((_graph_setVertexState(g, WHITE) == ERROR)){
+        return ERROR;
+    }
+
+    /*Creation of the stack*/
+    queue=queue_init();
+    if(!queue){
+        return ERROR;
+    }
+
+    /*We get the vertices that correspond to the given id's*/
+    vf = _graph_findVertexById(g, from_id);
+    vt = _graph_findVertexById(g, to_id);
+
+    if(!vt || !vf){
+        queue_free(queue);
+        return ERROR;
+    }
+
+    if(!(vertex_setState(vf, BLACK))){
+        queue_free(queue);
+        return ERROR;
+    }
+    if(!queue_push(queue, (void *)vf)){
+        queue_free(queue);
+        return ERROR;
+    }
+    
+    while(queue_isEmpty(queue)==FALSE && st==OK){
+        v0 = (Vertex *)queue_pop(queue);
+        if(!v0){
+            st = ERROR;
+            break;
+        }
+        printf("\n");
+        vertex_print(stdout, v0);
+        
+        if(vertex_cmp(v0, vt) == 0){
+            st=END;
+        }else{
+            adj_vert = graph_getConnectionsFromId(g, vertex_getId(v0));
+            if(!adj_vert){
+                st = ERROR;
+            }
+            for(i=0;i<graph_getNumberOfConnectionsFromId(g, vertex_getId(v0)) && st==OK;i++){
+                v = _graph_findVertexById(g, adj_vert[i]);
+                if(!v){
+                    st = ERROR;
+                }
+                if(vertex_getState(v)==WHITE){
+                    vertex_setState(v, BLACK);
+                    if(!(queue_push(queue, (void *)v))){
+                        st = ERROR;
+                    }
+                }
+            }
+            free(adj_vert);
+            adj_vert = NULL;
+        }
+    }
+    if(adj_vert != NULL){
+        free(adj_vert);
+    }
+    queue_free(queue);
+    return st;
 }

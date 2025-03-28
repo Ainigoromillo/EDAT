@@ -4,11 +4,8 @@
 
 #include "delivery.h"
 #include "vertex.h"
+#include "types.h"
 
-
-#define EXTENSION_LENGTH 4
-#define MAX_LINE_TAM 255
-#define MAX_NAME 255
 
 
 
@@ -20,7 +17,7 @@ int main(int argc, char *argv[]){
     void *city = NULL;
 
     if(argc != 2){
-        printf("Error con el numero de argumentos: el formato de los argumentos debe ser: ""file.txt""");
+        printf("Error con el numero de argumentos: el formato de los argumentos debe ser: ""/file_executable file.txt""");
         return 1;
     }
 

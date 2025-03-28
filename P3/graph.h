@@ -218,4 +218,14 @@ Status graph_readFromFile (FILE *fin, Graph *g);
  */
 Status graph_depthSearch(Graph *g, long from_id, long to_id);
 
+/**
+ * @brief Makes a search from the origin vertex to the destination vertex of a graph using the breath search algorithm
+ * 
+ * @param g pointer to the graph
+ * @param from_id id of the origin Vertex
+ * @param to_id id of the destination Vertex
+ * @return Status the function returns OK or ERROR
+ */
+Status graph_breathSearch(Graph *g, long from_id, long to_id);
+
 #endif /* GRAPH_H */
