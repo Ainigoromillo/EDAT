@@ -93,7 +93,6 @@ Status graph_newVertex(Graph *g, char *desc, int index)
     Vertex *newVertex = NULL;
     if (!g)
         return ERROR;
-
     newVertex = vertex_initFromString(desc);
 
     if(!newVertex){
@@ -363,7 +362,6 @@ Status graph_readFromFile(FILE *fin, Graph *g)
         return ERROR;
     }
 
-
     fgets(line, MAX_CHARS_IN_LINE, fin);
     t = atoi(line);
 
@@ -389,6 +387,7 @@ Status graph_readFromFile(FILE *fin, Graph *g)
         {
             return ERROR;
         }
+    
     }
 
     return OK;
@@ -489,7 +488,7 @@ int _graph_getNumConnections(const Graph *g, int ix){
 Status graph_breathSearch(Graph *g, long from_id, long to_id){
     int i;
     Status st=OK;
-    Stack *queue=NULL;
+    Queue *queue=NULL;
     Vertex *vf=NULL, *vt=NULL, *v0=NULL, *v=NULL;
     long *adj_vert=NULL;
 
@@ -501,7 +500,7 @@ Status graph_breathSearch(Graph *g, long from_id, long to_id){
     }
 
     /*Creation of the stack*/
-    queue=queue_init();
+    queue=queue_new();
     if(!queue){
         return ERROR;
     }

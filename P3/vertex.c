@@ -200,7 +200,7 @@ int vertex_print(FILE *pf, const void *v)
 }
 
 Status vertex_setIndex(Vertex *v, int index){
-  if(!v || index < 1){
+  if(!v || index < 0){
     return ERROR;
   }
 
