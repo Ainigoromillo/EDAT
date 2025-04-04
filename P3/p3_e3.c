@@ -62,15 +62,20 @@ int main(int argc, char *argv[]){
 
     printf("\nSIZE : %d\n", num);
     for(i = 0; i < num ; i++){
+        printf(" i : %d", i);
         if((i + 1)%2 == 1){ /*posicion impar*/
+            printf("Es impar ");
             list_pushBack(list_1, &notes_array[i]);
         }
         if((i+1)%2 == 0){ /*posicion par*/
+            printf("es par");
             list_pushFront(list_1, &notes_array[i]);
         }
-
+        printf("%f\n", notes_array[i]);
     }
+    printf("La lista creada es : \n");
     list_print(stdout, list_1, float_print);
+
     printf("\nFinished inserting");
 
     printf("\nNow we extract from the beginning and insert in order: \n");
