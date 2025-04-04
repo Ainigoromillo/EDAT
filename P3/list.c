@@ -124,29 +124,30 @@ Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
 
     temp_node = pl->last;
 
-    if(temp_node->next != NULL){
+    if(temp_node != pl->last){
         if(order == 1){
             while(f(e, temp_node->next->data) > 1){
-                temp_node = temp_node->next;
-                if(temp_node == pl->last){
+                if(temp_node->next == pl->last){
                     break;
                 }
+                temp_node = temp_node->next;
             }
         }else if(order == -1){
             while(f(e, temp_node->next->data) < 1){
-                temp_node = temp_node->next;
-                if(temp_node == pl->last){
+                if(temp_node->next == pl->last){
                     break;
                 }
+                temp_node = temp_node->next;
+                
             }
         }
-    }
-
-    if(temp_node == pl->last){
-        list_pushBack(pl, e);
-    }else{
         newNode->next = temp_node->next;
         temp_node->next = newNode;
+
+    }
+    else
+    {
+        list_pushBack(pl, e);
     }
 
     return OK;
