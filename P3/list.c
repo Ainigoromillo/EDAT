@@ -230,10 +230,12 @@ int list_print(FILE *fp, const List *pl, P_ele_print f){
     pn = pl->last;
 
     while(pn->next != pl->last){
-        f(stdout, pn->data);
         pn = pn->next;
+        f(stdout, pn->data);
         count++;
     }
+    f(stdout, pl->last->data);
+
 
     return count;
 }
