@@ -1,4 +1,5 @@
 #include "list.h"
+#include <stdlib.h>
 
 typedef struct _NodeList{
     void *data;
@@ -37,6 +38,7 @@ List *list_new(){
         return NULL;
     }
     new_list->last = NULL;
+    return new_list;
 }
 
 Bool list_isEmpty(const List *pl){
@@ -46,7 +48,7 @@ Bool list_isEmpty(const List *pl){
 }
 
 Status list_pushFront(List *pl, void *e){
-    NodeList *newNode=NULL, *firstNode=NULL, *lastNode=NULL;
+    NodeList *newNode=NULL, *firstNode=NULL;
 
     if(!pl || !e){
         return ERROR;
@@ -65,7 +67,6 @@ Status list_pushFront(List *pl, void *e){
         newNode->next = NULL;
     }else{
         firstNode = pl->last->next;
-        lastNode = pl->last;
 
         pl->last->next = newNode;
         newNode->next = firstNode;
@@ -76,7 +77,7 @@ Status list_pushFront(List *pl, void *e){
 
 
 Status list_pushBack(List *pl, void *e){
-    NodeList *newNode=NULL, *firstNode=NULL, *lastNode=NULL;
+    NodeList *newNode=NULL, *firstNode=NULL;
 
     if(!pl || !e){
         return ERROR;
@@ -87,13 +88,12 @@ Status list_pushBack(List *pl, void *e){
     if(!newNode){
         return ERROR;
     }
-
+    newNode->data = e;
     if(list_isEmpty(pl)){
         pl->last = newNode;
-        newNode->next = NULL;
+        newNode->next = newNode;
     }else{
         firstNode = pl->last->next;
-        lastNode = pl->last;
 
         pl->last->next = newNode;
         newNode->next = firstNode;
@@ -159,9 +159,9 @@ void *list_popFront(List *pl){
     NodeList *z=NULL;
     void *e=NULL;
 
-    if(!pl || list_is_empty(pl)) return NULL;
+    if(!pl || list_isEmpty(pl)) return NULL;
 
-    if(pl->last->next = pl->last){
+    if(pl->last->next == pl->last){
         e = pl->last->data;
         free(pl->last);
         pl->last=NULL;
@@ -180,11 +180,11 @@ void *list_popBack(List *pl){
     NodeList *z=NULL;
     void *e=NULL;
 
-    if(!pl || list_is_empty(pl)) return NULL;
+    if(!pl || list_isEmpty(pl)) return NULL;
 
     e = pl->last->data;
 
-    if(pl->last->next = pl->last){
+    if(pl->last->next == pl->last){
         free(pl->last);
         pl->last=NULL;
         return e;
@@ -197,6 +197,7 @@ void *list_popBack(List *pl){
     z->next = pl->last->next;
 
     free(pl->last);
+    pl->last = z;
     return e;
 }
 
@@ -209,8 +210,8 @@ void list_free(List *pl){
 
     while(pl->last != NULL){
         pn = pl->last;
-        pl->last = node_get_next(pn);
-        node_destroy(pn);
+        pl->last = pn->next;
+        free(pn);
     }
 
     free(pl);
@@ -228,7 +229,7 @@ int list_print(FILE *fp, const List *pl, P_ele_print f){
 
     pn = pl->last;
 
-    while(pn->next != NULL){
+    while(pn->next != pl->last){
         f(stdout, pn->data);
         pn = pn->next;
         count++;
@@ -237,12 +238,12 @@ int list_print(FILE *fp, const List *pl, P_ele_print f){
     return count;
 }
 
-int list_size(const List *l){
+size_t list_size(const List *l){
     NodeList *z=NULL;
     int count=0;
 
     if(!l) return -1;
-    if(list_is_empty(l)) return 0;
+    if(list_isEmpty(l)) return 0;
 
     z = l->last;
     while(z->next != l->last){

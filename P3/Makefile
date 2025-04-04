@@ -52,7 +52,7 @@ list.o: list.c list.h
 
 file_utils.o: file_utils.c
 	$(CC) $(CFLAGS) -c file_utils.c
-	
+
 .PHONY: clear clean run runv
 
 clear:
@@ -84,3 +84,19 @@ run2b:
 run2bv:
 	@echo ">>>>>>Running p3_e2a with valgrind"
 	valgrind --leak-check=full ./p3_e2b city_graph.txt 100 700
+
+run3_1:
+	@echo ">>>>>>Running p3_e3"
+	./p3_e3 grades.txt 1
+	
+run3_1v:
+	@echo ">>>>>>Running p3_e2 with valgrind"
+	valgrind --leak-check=full ./p3_e3 grades.txt 1
+
+run3_-1:
+	@echo ">>>>>>Running p3_e3"
+	./p3_e3 grades.txt -1
+	
+run3_-1v:
+	@echo ">>>>>>Running p3_e2 with valgrind"
+	valgrind --leak-check=full ./p3_e3 grades.txt -1
