@@ -153,71 +153,85 @@ Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
 }
 
 
-/**
- * @brief Public function that pops the front element from a List.
- *
- * Extracts the front element from the List, returning a pointer to it.
- *
- * @param pl Pointer to the List.
- *
- * @return Pointer to the extracted element, or NULL in case of error.
- */
-void *list_popFront(List *pl);
 
-/**
- * @brief Public function that pops the back element from a List.
- *
- * Extracts the element element from the List, returning a pointer to it.
- *
- * Note that it is necessary to traverse the list in order to obtain the
- * extract position, so this operation is linear in the number of List elements.
- *
- * @param pl Pointer to the List.
- *
- * @return Pointer to the extracted element, NULL if the List is empty or NULL.
- */
-void *list_popBack(List *pl);
+void *list_popFront(List *pl){
+    NodeList *z=NULL;
+    void *e=NULL;
 
-/**
- * @brief Public function that frees a List.
- *
- * Frees all the memory allocated for the List.
- *
- * @param pl Pointer to the List.
- */
-void list_free(List *pl);
+    if(!pl || list_is_empty(pl)) return NULL;
 
-/**
- * @brief Public function that returns the number of elements in a List.
- *
- * Note that the number of elements is not stored in the data structure, and the
- * List must be traversed in order to obtain its size. So this operation is linear
- * in the number of List elements.
- *
- * @param pl Pointer to the List.
- *
- * @return Returns the number of elements in the List, or -1 if the List is NULL.
- */
-size_t list_size(const List *pl);
+    if(pl->last->next = pl->last){
+        e = pl->last->data;
+        free(pl->last);
+        pl->last=NULL;
+        return e;
+    }
 
-/**
- * @brief Public function that prints the content of a List.
- *
- * Prints all the elements in the List, from front to rear, to an output stream.
- *
- * Note that this function simply calls the P_ele_print function for each List
- * element, also printing the size of this list at the beginning and an additional blank space 
- * between elements.
- * Any other desired format must be included in the P_ele_print function.
- *
- * @param fp Output stream.
- * @param pl Pointer to the List.
- * @param f A pointer to the function that must be used to print the list elements.
- *
- * @return The sum of the return values of all the calls to P_ele_print if these
- * values are all positive; the first negative value encountered otherwise. If the
- * function P_ele_print is well constructed, this means that, upon successful return,
- * this function returns the number of characters printed, and a negative value if
- * an error occurs.
- */
-int list_print(FILE *fp, const List *pl, P_ele_print f);
+    z = pl->last->next->next;
+    e = pl->last->next->data;
+    free(pl->last->next);
+
+    pl->last->next = z;
+    return e;
+}
+
+void *list_popBack(List *pl){
+    NodeList *z=NULL;
+    void *e=NULL;
+
+    if(!pl || list_is_empty(pl)) return NULL;
+
+    e = pl->last->data;
+
+    if(pl->last->next = pl->last){
+        free(pl->last);
+        pl->last=NULL;
+        return e;
+    }
+
+    z = pl->last;
+    while(z->next != pl->last){
+        z = z->next;
+    }
+    z->next = pl->last->next;
+
+    free(pl->last);
+    return e;
+}
+
+
+void list_free(List *pl){
+    NodeList *pn = NULL;
+    if(pl == NULL){
+        return;
+    }
+
+    while(pl->last != NULL){
+        pn = pl->last;
+        pl->last = node_get_next(pn);
+        node_destroy(pn);
+    }
+
+    free(pl);
+
+    return;
+}
+
+int list_print(FILE *fp, const List *pl, P_ele_print f){
+    NodeList *pn = NULL;
+    int count=0;
+
+    if (f == NULL || pl == NULL || fp == NULL){
+        return -1;
+    }
+
+    pn = pl->last;
+
+    while(pn->next != NULL){
+        f(stdout, pn->data);
+        pn = pn->next;
+        count++;
+    }
+
+    return count;
+}
