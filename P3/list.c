@@ -236,3 +236,18 @@ int list_print(FILE *fp, const List *pl, P_ele_print f){
 
     return count;
 }
+
+int list_size(const List *l){
+    NodeList *z=NULL;
+    int count=0;
+
+    if(!l) return -1;
+    if(list_is_empty(l)) return 0;
+
+    z = l->last;
+    while(z->next != l->last){
+        z = z->next;
+        count++;
+    }
+    return count;
+}
