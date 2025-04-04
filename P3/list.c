@@ -252,5 +252,6 @@ size_t list_size(const List *l){
         z = z->next;
         count++;
     }
+    count ++;
     return count;
 }

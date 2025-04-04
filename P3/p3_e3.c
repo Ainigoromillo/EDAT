@@ -87,7 +87,6 @@ int main(int argc, char *argv[]){
     while(list_isEmpty(list_1) == FALSE){
         note = list_popBack(list_1);
         float_print(stdout, note);
-        
         list_pushInOrder(list_2, note, float_cmp, cmp_arg);
     }
     printf("\nSIZE : %ld\n", list_size(list_2));
