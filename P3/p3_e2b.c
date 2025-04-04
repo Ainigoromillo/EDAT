@@ -55,20 +55,21 @@ int main(int argc, char *argv[])
     fclose(pf);
     printf("INPUT GRAPH:\n");
     graph_print(stdout, graph);
-    printf("--------BFS-------\n");
-    printf("From vertex id: %ld\nTo vertex id: %ld", idOrigin, idDest);
-    printf("\nOUTPUT:");
-    if (graph_breathSearch(graph, idOrigin, idDest) == ERROR)
-    {
-        printf("\nERROR IN BFS\n");
-    }
     printf("\n\n--------DFS-------\n");
-    printf("From vertex id: %ld\n To vertex id: %ld", idOrigin, idDest);
+    printf("From vertex id: %ld\n To vertex id: %ld\n", idOrigin, idDest);
     printf("\nOUTPUT:");
     if (graph_depthSearch(graph, idOrigin, idDest) == ERROR)
     {
         printf("\nERROR IN DFS\n");
     }
+    printf("\n\n\n--------BFS-------\n");
+    printf("From vertex id: %ld\nTo vertex id: %ld\n", idOrigin, idDest);
+    printf("\nOUTPUT:");
+    if (graph_breathSearch(graph, idOrigin, idDest) == ERROR)
+    {
+        printf("\nERROR IN BFS\n");
+    }
+    printf("\n");
     graph_free(graph);
 
     return 0;

@@ -140,7 +140,7 @@ Status delivery_run_plan(FILE *pf, Delivery *d, p_element_print fprint, p_elemen
   queue = delivery_getPlan(d);
   if(!queue) return ERROR;
 
-  fprintf(pf, "Running delivery plan for queue:\n");
+  fprintf(pf, "\nRunning delivery plan for queue:\n");
   queue_print(pf,queue,fprint);
   
   while(queue_isEmpty(queue) == FALSE){
