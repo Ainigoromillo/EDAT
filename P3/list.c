@@ -10,11 +10,6 @@ struct _List{
     NodeList * last;
 };
 
-/**
- * @brief creates a new node for the list
- * 
- * @return pointer to the created node
- */
 NodeList *node_create(){
     NodeList *newNode=NULL;
 
@@ -64,7 +59,7 @@ Status list_pushFront(List *pl, void *e){
 
     if(list_isEmpty(pl)){
         pl->last = newNode;
-        newNode->next = NULL;
+        newNode->next = newNode;
     }else{
         firstNode = pl->last->next;
 
@@ -112,42 +107,52 @@ Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
         return ERROR;
     }
 
+    /*Si la lista está vacía, llamamos a push front*/
+    if(list_isEmpty(pl)){
+        return list_pushFront(pl, e);
+    }
+
+    /*Creamos un nuevo nodo para insertarlo manualmente en la lista*/
     newNode = node_create();
     if(!newNode){
         return ERROR;
     }
+    newNode->data = e;
 
-    if(list_isEmpty(pl)){
-        list_pushBack(pl, e);
-        return OK;
-    }
-
+    /*Empezaremos desde la última posición de la lista*/
     temp_node = pl->last;
 
-    if(temp_node != pl->last){
+    /*Verificamos si la lista tiene varios elementos o únicamente uno*/
+    if(temp_node->next != pl->last){
+        /*Si ordenamos de menor a mayor, vamos recorriendo la lista hasta llegar al final o hasta encontrar un elemento mayor que el actual*/
         if(order == 1){
-            while(f(e, temp_node->next->data) > 1){
-                if(temp_node->next == pl->last){
-                    break;
-                }
+            while(f(e, temp_node->next->data) > 0 && temp_node->next != pl->last){
                 temp_node = temp_node->next;
             }
         }else if(order == -1){
-            while(f(e, temp_node->next->data) < 1){
-                if(temp_node->next == pl->last){
-                    break;
-                }
+            while(f(e, temp_node->next->data) < 0 && temp_node->next != pl->last){
                 temp_node = temp_node->next;
-                
             }
         }
         newNode->next = temp_node->next;
         temp_node->next = newNode;
-
+        
     }
     else
     {
-        list_pushBack(pl, e);
+        /*Si la lista solo tiene un elemento, lo añadimos directamente*/
+        newNode->next = pl->last;
+        pl->last->next = newNode;
+        pl->last = newNode;
+        if(order == 1){
+            if(f(e, temp_node->next->data) < 0){
+                pl->last = newNode;
+            }
+        }else if(order == -1){
+            if(f(e, temp_node->next->data) > 0){
+                pl->last = newNode;
+            }
+        }
     }
 
     return OK;
@@ -203,17 +208,22 @@ void *list_popBack(List *pl){
 
 
 void list_free(List *pl){
-    NodeList *pn = NULL;
-    if(pl == NULL){
+    NodeList *current = NULL, *nextNode = NULL;
+
+    if(pl == NULL || pl->last == NULL){
+        free(pl);
         return;
     }
-
-    while(pl->last != NULL){
-        pn = pl->last;
-        pl->last = pn->next;
-        free(pn);
+    printf("\n\nList free:");
+    current = pl->last->next; 
+    while (current != pl->last) {
+        nextNode = current->next;
+        printf("%f ", *(float *)(current->data));
+        free(current);
+        current = nextNode;
     }
-
+    printf("%f", *(float *)(pl->last->data));
+    free(pl->last);
     free(pl);
 
     return;
@@ -225,6 +235,9 @@ int list_print(FILE *fp, const List *pl, P_ele_print f){
 
     if (f == NULL || pl == NULL || fp == NULL){
         return -1;
+    }
+    if(list_isEmpty(pl)){
+        return 0;
     }
 
     pn = pl->last;

@@ -117,6 +117,7 @@ Status list_pushBack(List *pl, void *e);
  * otherwise.
  */
 Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order);
+Status list_pushInOrder2 (List *pl, void *e, P_ele_cmp f, int order);
 
 
 /**
