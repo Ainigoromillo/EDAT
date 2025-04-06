@@ -21,7 +21,7 @@ struct _Delivery {
 };
 
 Delivery *delivery_init (char *name, char *productName){
-	Delivery *d;
+	Delivery *d=NULL;
 
   if ((name==NULL) || (productName==NULL)){
     return NULL;
@@ -59,7 +59,7 @@ Delivery *delivery_init (char *name, char *productName){
 }
 
 void delivery_free (void *p){
-  Delivery *d;
+  Delivery *d=NULL;
 
   if (p == NULL){
     return;
