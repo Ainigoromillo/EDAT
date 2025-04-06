@@ -141,15 +141,17 @@ Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
     else
     {
         /*Si la lista solo tiene un elemento, lo añadimos directamente*/
+        /*1->menor a mayor
+        -1->mayor a menor
+          */
         newNode->next = pl->last;
         pl->last->next = newNode;
-        pl->last = newNode;
         if(order == 1){
-            if(f(e, temp_node->next->data) < 0){
+            if(f(e, pl->last->data) > 0){
                 pl->last = newNode;
             }
         }else if(order == -1){
-            if(f(e, temp_node->next->data) > 0){
+            if(f(e, pl->last->data) < 0){
                 pl->last = newNode;
             }
         }
@@ -214,15 +216,14 @@ void list_free(List *pl){
         free(pl);
         return;
     }
-    printf("\n\nList free:");
+
     current = pl->last->next; 
     while (current != pl->last) {
         nextNode = current->next;
-        printf("%f ", *(float *)(current->data));
         free(current);
         current = nextNode;
     }
-    printf("%f", *(float *)(pl->last->data));
+
     free(pl->last);
     free(pl);
 
@@ -231,11 +232,12 @@ void list_free(List *pl){
 
 int list_print(FILE *fp, const List *pl, P_ele_print f){
     NodeList *pn = NULL;
-    int count=0;
+    int count=0, i = 1;
 
     if (f == NULL || pl == NULL || fp == NULL){
         return -1;
     }
+
     if(list_isEmpty(pl)){
         return 0;
     }
@@ -244,10 +246,10 @@ int list_print(FILE *fp, const List *pl, P_ele_print f){
 
     while(pn->next != pl->last){
         pn = pn->next;
-        f(stdout, pn->data);
-        count++;
+        count += f(stdout, pn->data);
+        i++;
     }
-    f(stdout, pl->last->data);
+    count += f(stdout, pl->last->data);
 
 
     return count;

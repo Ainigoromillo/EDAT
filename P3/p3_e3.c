@@ -77,21 +77,20 @@ int main(int argc, char *argv[]){
     printf("\nNow we extract from the beginning and insert in order: \n");
     for(i = 0; i < num/2 ; i++){
         note = list_popFront(list_1);
-        float_print(stdout, note);
         list_pushInOrder(list_2, note, float_cmp, cmp_arg);
-        /*printf("\n\nEstado actual de la lista: ");
-        list_print(stdout, list_2, float_print);*/
+        float_print(stdout, note);
+
     }
+    printf("\nNow we extract from the end and insert in order: \n");
     while(list_isEmpty(list_1) == FALSE){
         note = list_popBack(list_1);
-        float_print(stdout, note);
         list_pushInOrder(list_2, note, float_cmp, cmp_arg);
-        /*list_print(stdout, list_2, float_print);
-        printf("\n\nEstado actual de la lista: ");
-        list_print(stdout, list_2, float_print);*/
+        float_print(stdout, note);
     }
     printf("\nSIZE : %ld\n", list_size(list_2));
+
     list_print(stdout, list_2, float_print);
+
 
     list_free(list_1);
     list_free(list_2);
