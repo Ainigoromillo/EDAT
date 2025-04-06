@@ -80,6 +80,7 @@ int main(int argc, char *argv[]){
         list_pushInOrder(list_2, note, float_cmp, cmp_arg);
         float_print(stdout, note);
 
+
     }
     printf("\nNow we extract from the end and insert in order: \n");
     while(list_isEmpty(list_1) == FALSE){

@@ -1,5 +1,6 @@
 #include "list.h"
 #include <stdlib.h>
+#include "file_utils.h"
 
 typedef struct _NodeList{
     void *data;
@@ -134,8 +135,32 @@ Status list_pushInOrder (List *pl, void *e, P_ele_cmp f, int order){
                 temp_node = temp_node->next;
             }
         }
+
+        if(temp_node->next == pl->last){
+            if(order == 1){
+                if(f(e, pl->last->data) > 0){
+                    newNode->next = pl->last->next;
+                    pl->last->next = newNode;
+                    pl->last = newNode;
+                }else{
+                    newNode->next = temp_node->next;
+                    temp_node->next = newNode;
+                }
+            }
+            else if(order == -1){
+                if(f(e, pl->last->data) < 0){
+                    newNode->next = pl->last->next;
+                    pl->last->next = newNode;
+                    pl->last = newNode;
+                }else{
+                    newNode->next = temp_node->next;
+                    temp_node->next = newNode;
+                }
+            }
+        }else{
         newNode->next = temp_node->next;
         temp_node->next = newNode;
+        }
         
     }
     else
