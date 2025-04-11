@@ -82,7 +82,7 @@ run2b:
 	./p3_e2b city_graph.txt 100 700
 	
 run2bv:
-	@echo ">>>>>>Running p3_e2a with valgrind"
+	@echo ">>>>>>Running p3_e2b with valgrind"
 	valgrind --leak-check=full ./p3_e2b city_graph.txt 100 700
 
 run3_1:

@@ -74,7 +74,7 @@ void delivery_free (void *p){
 }
 
 void delivery_free_products (Delivery *d, p_element_free ffree) {
-  if (!(d)) {
+  if (!(d) || !ffree) {
     return;
   }
 
@@ -194,7 +194,10 @@ void *delivery_copy (const void *src){
   plan_size = queue_size(d->plan);
   for (i = 0; i<plan_size; i++){
     e = queue_pop(d->plan);
-    queue_push(trg->plan, e);
+    if(!(queue_push(trg->plan, e))){
+      delivery_free(trg);
+      return NULL;
+    }
     queue_push(d->plan, e);
   }
   
