@@ -1,4 +1,3 @@
-include makefile_ext
 
 ########################################################
 CC=gcc
@@ -18,3 +17,11 @@ vertex.o: vertex.c vertex.h types.h bstree.c
 
 p4_e1.o: p4_e1.c vertex.h types.h bstree.h 
 	$(CC) $(CFLAGS) -c p4_e1.c
+	
+bstree.o: bstree.c bstree.h
+	$(CC) $(CFLAGS) -c bstree.c
+
+clean: 
+	rm -rf *.o $(EJS)
+
+include makefile_ext

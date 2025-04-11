@@ -71,7 +71,7 @@ Vertex *vertex_initFromString(char *descr)
 
   /* Read and tokenize description: */
   sprintf(buffer, "%s", descr);
-  token = strtok(buffer, " \t\n");
+  token = strtok(buffer, " \t\n\r");
   while (token)
   {
     p = strchr(token, ':');
@@ -84,7 +84,7 @@ Vertex *vertex_initFromString(char *descr)
 
     vertex_setField(v, key, value);
 
-    token = strtok(NULL, " \t\n");
+    token = strtok(NULL, " \t\n\r");
   }
 
   return v;
@@ -195,7 +195,7 @@ int vertex_print(FILE *pf, const void *v)
   Vertex *w = (Vertex *)v;
   if (!v)
     return -1;
-  sum = fprintf(pf, "[%ld,%s,%d, %d]", vertex_getId(w), vertex_getTag(w), vertex_getState(w), vertex_getIndex(v));
+  sum = fprintf(pf, "[%ld,%s,%d,%d]", vertex_getId(w), vertex_getTag(w), vertex_getState(w), vertex_getIndex(v));
   return sum;
 }
 

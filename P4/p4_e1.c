@@ -28,7 +28,7 @@ void freeData(Vertex **data, int n) {
 Vertex **loadData(FILE *pf, int n) {
   int i;
   char string[MAX_LINE];
-  Vertex **data = NULL;
+  Vertex **data = NULL, *vertice = NULL;
 
   if (!pf || (n <= 0)) {
     return NULL;
@@ -48,6 +48,7 @@ Vertex **loadData(FILE *pf, int n) {
       freeData(data, n);
       return NULL;
     }
+
   }
 
   return data;
@@ -63,8 +64,8 @@ void loadBalancedTree_rec(Vertex **sorted_data, BSTree *t, int first, int last) 
       fprintf(stdout, "Vertex ");
       vertex_print(stdout, v);
       fprintf(stdout, " not inserted!\n");
+      
     }
-
     loadBalancedTree_rec(sorted_data, t, first, middle - 1);
     loadBalancedTree_rec(sorted_data, t, middle + 1, last);
   }
@@ -105,6 +106,7 @@ BSTree *loadUnbalancedTree(Vertex **data, int n) {
       fprintf(stdout, "Vertex ");
       vertex_print(stdout, v);
       fprintf(stdout, " not inserted!\n");
+      
     }
   }
 

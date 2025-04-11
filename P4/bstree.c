@@ -47,6 +47,7 @@ void _bst_node_free(BSTNode *pn)
   }
 
   free(pn);
+  pn = NULL;
 }
 
 void _bst_node_free_rec(BSTNode *pn)
@@ -55,7 +56,7 @@ void _bst_node_free_rec(BSTNode *pn)
   {
     return;
   }
-
+  
   _bst_node_free_rec(pn->left);
   _bst_node_free_rec(pn->right);
   _bst_node_free(pn);
@@ -272,6 +273,7 @@ Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   }else if(cmp_elem(elem, pn->info) > 0){
     return _bst_contains_rec(pn->right, elem, cmp_elem);
   }
+  return FALSE;
 }
 
 BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
@@ -280,33 +282,124 @@ BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   if(!pn || !elem ||!cmp_elem){
     return NULL;
   }
-  if(cmp_elem(elem, pn->info) > 0 && cmp_elem(elem, pn->right->info) < 0){
-    node = _bst_node_new();
-    if(!node) return NULL;
-    node->info = elem;
-    node->right = pn->right;
-    pn->right = node;
-    return node;
+
+  if(cmp_elem(elem, pn->info) > 0){
+    /*el nuevo nodo es mayor que el nodo*/
+    if(pn->right == NULL || pn->right->info == NULL){
+      /*no hay nodo hijo por la derecha, por tanto se inserta ahi mismo*/
+
+      node = _bst_node_new();
+      if(!node) return NULL;
+      node->info = (void *)elem;
+      pn->right = node;
+      return node;
+    }
+    if(cmp_elem(elem, pn->right->info) < 0){
+      /*entonces el nodo nuevo a insertar esta entre el nodo y el de su derecha*/
+      node = _bst_node_new();
+      if(!node) return NULL;
+      node->info = (void *)elem;
+      node->right = pn->right;
+      pn->right = node;
+      return node;
+    }
+    if(cmp_elem(elem, pn->right->info) > 0){
+      /*entonces es mayor que ambos, se llama a la funcion con el nodo hijo por la derecha*/
+      return _bst_insert_rec(pn->right, elem, cmp_elem);
+    }
   }
-  if(cmp_elem(elem, pn->info) < 0 && cmp_elem(elem, pn->left->info) > 0){
-    node = _bst_node_new();
-    if(!node) return NULL;
-    node->info = elem;
-    node->left = pn->left;
-    pn->left = node;
-    return node;
-  }else if(cmp_elem(elem, pn->info) < 0 && cmp_elem(elem, pn->left->info) < 0){
-    return _bst_insert_rec(pn->left, elem, cmp_elem);
-  }else if(cmp_elem(elem, pn->info) > 0 && cmp_elem(elem, pn->right->info) > 0){
-    return _bst_insert_rec(pn->right, elem, cmp_elem);
+
+  if(cmp_elem(elem, pn->info) < 0){
+    /*el nuevo nodo es mayor que el nodo*/
+    if(pn->left == NULL || pn->left->info == NULL){
+      /*no hay nodo hijo por la izquierda, por tanto se inserta ahi mismo*/
+      node = _bst_node_new();
+      if(!node) return NULL;
+      node->info = (void *)elem;
+      pn->left = node;
+      return node;
+    }
+    if(cmp_elem(elem, pn->left->info) > 0){
+      /*entonces el nodo nuevo a insertar esta entre el nodo y el de su izquierda*/
+      node = _bst_node_new();
+      if(!node) return NULL;
+      node->info = (void *)elem;
+      node->left = pn->left;
+      pn->left = node;
+      return node;
+    }
+    if(cmp_elem(elem, pn->left->info) < 0){
+      /*entonces es menor que ambos, se llama a la funcion con el nodo hijo por la izquierda*/
+      return _bst_insert_rec(pn->left, elem, cmp_elem);
+    }
   }
+
+  return NULL;
 
 
 }
 
-BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem)
-{
-}
+/**
+ * @brief recibe un nodo en un árbol de búsqueda y un elemento buscado, devolviendo el nodo que va a ocupar la posición del nodo actual
+ * @author Matteo
+ * @param pn nodo inicial
+ * @param elem elemento buscado
+ * @param cmp_elem función de comparación de nodos
+ * @return nodo que ocupará la posición de pn al eleminar el elemento pasado como argumento
+ */
+
+ BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem)
+ {
+   BSTNode *ret_node = NULL, *aux_node = NULL;
+   /*Control de errores*/
+   if (!pn || !elem || !cmp_elem)
+   {
+     return NULL;
+   }
+   /*Si el elemento buscaso es menor que el actual, avanzamos hacia el nodo a la izquierda del actual*/
+   if (cmp_elem(pn->info, elem) < 0)
+   {
+     pn->left = _bst_remove_rec(pn->left, elem, cmp_elem);
+   }
+   /*Si el elemento buscaso es mayor que el actual, avanzamos hacia el nodo a la derecha del actual*/
+   else if (cmp_elem(pn->info, elem) > 0)
+   {
+     pn->right = _bst_remove_rec(pn->right, elem, cmp_elem);
+   }
+   /*En caso de que el elemento buscado sea el correspondiente al nodo actual, estudiamos */
+   else
+   {
+     /*Si el nodo no tiene ningún hijo, lo liberamos y devolvemos NULL, indicando que ahora ningún nodo estará donde antes estaba pn, es decir, se ha eliminado*/
+     if (pn->left == NULL && pn->right == NULL)
+     {
+       _bst_node_free(pn);
+       return NULL;
+     }
+     /*Si tiene un hijo a la derecha, ponemos dicho hijo en la posición que antes ocupaba el nodo pn*/
+     else if (pn->right != NULL && pn->left == NULL)
+     {
+       ret_node = pn->right;
+       _bst_node_free(pn);
+       return ret_node;
+     }
+     /*Si tiene un hijo a la izquierda, ponemos dicho hijo en la posición que antes ocupaba el nodo pn*/
+     else if (pn->right == NULL && pn->left != NULL)
+     {
+       ret_node = pn->left;
+       _bst_node_free(pn);
+       return ret_node;
+     }
+     /*Si el nodo tiene hijos tanto a la izquierda como a la derecha, avanzamos una posición a la derecha y encontramos el mínimo a partir de ese nodo, situándolo en la posición de pn*/
+     else if (pn->right != NULL && pn->left != NULL)
+     {
+       aux_node = _bst_find_min_rec(pn->right);
+       pn->info = aux_node->info;
+       pn->right = _bst_remove_rec(pn->right, aux_node->info, cmp_elem);
+       return pn;
+     }
+   }
+   return pn;
+ }
 
 void *tree_find_min(BSTree *tree) {
   BSTNode *node = NULL;
@@ -333,17 +426,24 @@ Bool tree_contains(BSTree *tree, const void *elem) {
 }
 
 Status tree_insert(BSTree *tree, const void *elem) {
-  BSTNode *new_node = NULL;
+  BSTNode *newnode = NULL;
   if(!tree || !elem){
     return ERROR;
   }
   if(tree_contains(tree, elem)) return OK;
+  if(tree->root == NULL){
+    newnode = _bst_node_new();
+    if(!newnode) return ERROR;
+    newnode->info = (void *)elem;
+    tree->root = newnode;
+    return OK;
+  }
 
   if(_bst_insert_rec(tree->root, elem, tree->cmp_ele) != NULL){
     return OK;
-  }else{
-    return FALSE;
   }
+
+  return ERROR;
 
 }
 
@@ -356,63 +456,3 @@ Status tree_remove(BSTree *tree, const void *elem)
   return OK;
 }
 
-/**
- * @brief recibe un nodo en un árbol de búsqueda y un elemento buscado, devolviendo el nodo que va a ocupar la posición del nodo actual
- * @author Matteo
- * @param pn nodo inicial
- * @param elem elemento buscado
- * @param cmp_elem función de comparación de nodos
- * @return nodo que ocupará la posición de pn al eleminar el elemento pasado como argumento
- */
-BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem)
-{
-  BSTNode *ret_node = NULL, *aux_node = NULL;
-  /*Control de errores*/
-  if (!pn || !elem || !cmp_elem)
-  {
-    return NULL;
-  }
-  /*Si el elemento buscaso es menor que el actual, avanzamos hacia el nodo a la izquierda del actual*/
-  if (cmp_elem(pn->info, elem) < 0)
-  {
-    pn->left = _bst_remove_rec(pn->left, elem, cmp_elem);
-  }
-  /*Si el elemento buscaso es mayor que el actual, avanzamos hacia el nodo a la derecha del actual*/
-  else if (cmp_elem(pn->info, elem) > 0)
-  {
-    pn->right = _bst_remove_rec(pn->right, elem, cmp_elem);
-  }
-  /*En caso de que el elemento buscado sea el correspondiente al nodo actual, estudiamos */
-  else
-  {
-    /*Si el nodo no tiene ningún hijo, lo liberamos y devolvemos NULL, indicando que ahora ningún nodo estará donde antes estaba pn, es decir, se ha eliminado*/
-    if (pn->left == NULL && pn->right == NULL)
-    {
-      _bst_node_free(pn);
-      return NULL;
-    }
-    /*Si tiene un hijo a la derecha, ponemos dicho hijo en la posición que antes ocupaba el nodo pn*/
-    else if (pn->right != NULL && pn->left == NULL)
-    {
-      ret_node = pn->right;
-      _bst_node_free(pn);
-      return ret_node;
-    }
-    /*Si tiene un hijo a la izquierda, ponemos dicho hijo en la posición que antes ocupaba el nodo pn*/
-    else if (pn->right == NULL && pn->left != NULL)
-    {
-      ret_node = pn->left;
-      _bst_node_free(pn);
-      return ret_node;
-    }
-    /*Si el nodo tiene hijos tanto a la izquierda como a la derecha, avanzamos una posición a la derecha y encontramos el mínimo a partir de ese nodo, situándolo en la posición de pn*/
-    else if (pn->right != NULL && pn->left != NULL)
-    {
-      aux_node = _bst_find_min_rec(pn->right);
-      pn->info = aux_node->info;
-      pn->right = _bst_remove_rec(pn->right, aux_node->info, cmp_elem);
-      return pn;
-    }
-  }
-  return pn;
-}
