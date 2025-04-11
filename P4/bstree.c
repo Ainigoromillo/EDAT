@@ -244,40 +244,107 @@ int tree_postOrder(FILE *f, const BSTree *tree)
 }
 
 /**** TODO: find_min, find_max, insert, contains, remove ****/
-BSTNode *_bst_find_min_rec(BSTNode *pn)
-{
+BSTNode *_bst_find_min_rec(BSTNode *pn) {
+  if(!pn) return NULL;
+  if(pn->left == NULL){
+    return pn;
+  }
+  return _bst_find_min_rec(pn->left);
 }
 
-BSTNode *_bst_find_max_rec(BSTNode *pn)
-{
+BSTNode *_bst_find_max_rec(BSTNode *pn) {
+  if(!pn) return NULL;
+  if(pn->right == NULL){
+    return pn;
+  }
+  return _bst_find_max_rec(pn->right);
 }
 
-Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem)
-{
+Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
+  if(!pn || !elem || !cmp_elem){
+    return FALSE;
+  }
+
+  if(cmp_elem(elem, pn->info) == 0){
+    return TRUE;
+  }else if(cmp_elem(elem, pn->info) < 0){
+    return _bst_contains_rec(pn->left, elem, cmp_elem);
+  }else if(cmp_elem(elem, pn->info) > 0){
+    return _bst_contains_rec(pn->right, elem, cmp_elem);
+  }
 }
 
-BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem)
-{
+BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
+  BSTNode *node = NULL;
+
+  if(!pn || !elem ||!cmp_elem){
+    return NULL;
+  }
+  if(cmp_elem(elem, pn->info) > 0 && cmp_elem(elem, pn->right->info) < 0){
+    node = _bst_node_new();
+    if(!node) return NULL;
+    node->info = elem;
+    node->right = pn->right;
+    pn->right = node;
+    return node;
+  }
+  if(cmp_elem(elem, pn->info) < 0 && cmp_elem(elem, pn->left->info) > 0){
+    node = _bst_node_new();
+    if(!node) return NULL;
+    node->info = elem;
+    node->left = pn->left;
+    pn->left = node;
+    return node;
+  }else if(cmp_elem(elem, pn->info) < 0 && cmp_elem(elem, pn->left->info) < 0){
+    return _bst_insert_rec(pn->left, elem, cmp_elem);
+  }else if(cmp_elem(elem, pn->info) > 0 && cmp_elem(elem, pn->right->info) > 0){
+    return _bst_insert_rec(pn->right, elem, cmp_elem);
+  }
+
+
 }
 
 BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem)
 {
 }
 
-void *tree_find_min(BSTree *tree)
-{
+void *tree_find_min(BSTree *tree) {
+  BSTNode *node = NULL;
+  if(!tree || !tree->root) return NULL;
+  
+  node = _bst_find_min_rec(tree->root);
+  return node->info;
 }
 
-void *tree_find_max(BSTree *tree)
-{
+void *tree_find_max(BSTree *tree) {
+  BSTNode *node = NULL;
+  if(!tree || !tree->root) return NULL;
+  
+  node = _bst_find_max_rec(tree->root);
+  return node->info;
 }
 
-Bool tree_contains(BSTree *tree, const void *elem)
-{
+Bool tree_contains(BSTree *tree, const void *elem) {
+  if(!tree || !elem){
+    return FALSE;
+  }
+  return _bst_contains_rec(tree->root, elem, tree->cmp_ele);
+
 }
 
-Status tree_insert(BSTree *tree, const void *elem)
-{
+Status tree_insert(BSTree *tree, const void *elem) {
+  BSTNode *new_node = NULL;
+  if(!tree || !elem){
+    return ERROR;
+  }
+  if(tree_contains(tree, elem)) return OK;
+
+  if(_bst_insert_rec(tree->root, elem, tree->cmp_ele) != NULL){
+    return OK;
+  }else{
+    return FALSE;
+  }
+
 }
 
 Status tree_remove(BSTree *tree, const void *elem)
