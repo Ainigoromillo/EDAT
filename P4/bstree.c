@@ -276,67 +276,21 @@ Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   return FALSE;
 }
 
-BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
-  BSTNode *node = NULL;
+BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem){
 
-  if(!pn || !elem ||!cmp_elem){
-    return NULL;
+  if(!elem || !pn){
+    BSTNode *z = _bst_node_new();
+    z->info = (void *)elem; 
+    return z;
+  } 
+
+  if(cmp_elem(elem, pn) > 0){
+    pn->right = _bst_insert_rec(pn->right, elem, cmp_elem);
   }
-
-  if(cmp_elem(elem, pn->info) > 0){
-    /*el nuevo nodo es mayor que el nodo*/
-    if(pn->right == NULL || pn->right->info == NULL){
-      /*no hay nodo hijo por la derecha, por tanto se inserta ahi mismo*/
-
-      node = _bst_node_new();
-      if(!node) return NULL;
-      node->info = (void *)elem;
-      pn->right = node;
-      return node;
-    }
-    if(cmp_elem(elem, pn->right->info) < 0){
-      /*entonces el nodo nuevo a insertar esta entre el nodo y el de su derecha*/
-      node = _bst_node_new();
-      if(!node) return NULL;
-      node->info = (void *)elem;
-      node->right = pn->right;
-      pn->right = node;
-      return node;
-    }
-    if(cmp_elem(elem, pn->right->info) > 0){
-      /*entonces es mayor que ambos, se llama a la funcion con el nodo hijo por la derecha*/
-      return _bst_insert_rec(pn->right, elem, cmp_elem);
-    }
+  else if(cmp_elem(elem, pn) < 0){
+    pn->left = _bst_insert_rec(pn->right, elem, cmp_elem);
   }
-
-  if(cmp_elem(elem, pn->info) < 0){
-    /*el nuevo nodo es mayor que el nodo*/
-    if(pn->left == NULL || pn->left->info == NULL){
-      /*no hay nodo hijo por la izquierda, por tanto se inserta ahi mismo*/
-      node = _bst_node_new();
-      if(!node) return NULL;
-      node->info = (void *)elem;
-      pn->left = node;
-      return node;
-    }
-    if(cmp_elem(elem, pn->left->info) > 0){
-      /*entonces el nodo nuevo a insertar esta entre el nodo y el de su izquierda*/
-      node = _bst_node_new();
-      if(!node) return NULL;
-      node->info = (void *)elem;
-      node->left = pn->left;
-      pn->left = node;
-      return node;
-    }
-    if(cmp_elem(elem, pn->left->info) < 0){
-      /*entonces es menor que ambos, se llama a la funcion con el nodo hijo por la izquierda*/
-      return _bst_insert_rec(pn->left, elem, cmp_elem);
-    }
-  }
-
-  return NULL;
-
-
+  return pn;
 }
 
 /**
@@ -426,24 +380,15 @@ Bool tree_contains(BSTree *tree, const void *elem) {
 }
 
 Status tree_insert(BSTree *tree, const void *elem) {
-  BSTNode *newnode = NULL;
   if(!tree || !elem){
     return ERROR;
   }
-  if(tree_contains(tree, elem)) return OK;
-  if(tree->root == NULL){
-    newnode = _bst_node_new();
-    if(!newnode) return ERROR;
-    newnode->info = (void *)elem;
-    tree->root = newnode;
-    return OK;
-  }
+  
+  tree->root = _bst_insert_rec(tree->root, elem, tree->cmp_ele);
 
-  if(_bst_insert_rec(tree->root, elem, tree->cmp_ele) != NULL){
-    return OK;
-  }
+  if(!(tree->root)) return ERROR;
 
-  return ERROR;
+  return OK;
 
 }
 
