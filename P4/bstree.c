@@ -284,11 +284,11 @@ BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem){
     return z;
   } 
 
-  if(cmp_elem(elem, pn) > 0){
+  if(cmp_elem(elem, pn->info) > 0){
     pn->right = _bst_insert_rec(pn->right, elem, cmp_elem);
   }
-  else if(cmp_elem(elem, pn) < 0){
-    pn->left = _bst_insert_rec(pn->right, elem, cmp_elem);
+  else if(cmp_elem(elem, pn->info) < 0){
+    pn->left = _bst_insert_rec(pn->left, elem, cmp_elem);
   }
   return pn;
 }

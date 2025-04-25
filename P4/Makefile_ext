@@ -8,13 +8,13 @@ OUT = ./out
 
 
 run_e1: p4_e1
-	./p4_e1 $(DATA)/data_vertex_10K.txt "id:88997 tag:Golf_de_Ibiza" normal
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" normal
 	@echo ""
-	./p4_e1 $(DATA)/data_vertex_10K.txt "id:88997 tag:Golf_de_Ibiza" sorted
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" sorted
 	@echo ""
-	./p4_e1 $(DATA)/data_vertex_10K.txt "id:889907 tag:Golf_de_Ibiza" normal
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" normal
 	@echo ""
-	./p4_e1 $(DATA)/data_vertex_10K.txt "id:889907 tag:Golf_de_Ibiza" sorted
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" sorted
 
 run_e2: p4_e2
 	./p4_e2 $(DATA)/data_string_10.txt $(OUT)/data_string_10.out

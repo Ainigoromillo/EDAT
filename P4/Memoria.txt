@@ -1,0 +1,17 @@
+Memoria Ejercicio 1c:
+
+¿Por qué es asi?
+
+Podemos ver que el tiempo de ejecucion del programa difiere bastante entre el modo normal y el sorted. Este efecto se ve sobretodo en el tiempo
+de construicción del árbol, pues este proceso requiere mas iteraciones y el alargamiento del tiempo se acumula.
+Cuando se ejecuta el modo normal, los nodos se insertan en el arbol en el orden en el que han sido leídos, cuando se ejecuta el modo sorted, primero se ordena
+el array de elementos leídos del fichero, y después se insertan en el arbol de manera óptima, es decir, se va insertando la mediana de cada "segmento" del array,
+partiéndolo en dos nuevos fragmentos y llamando de manera recursiva a insertar de nuevo las medianas, hasta que el fragmento se quede sin elementos.
+Al hacer esto con el array ordenado, se forma un arbol de búsqueda óptimo, en el que la busqueda e inserción de un elemento tiene una complejidad temporal de nlog2n.
+Este resultado se ve en la eficiencia de ejecucion del programa, construyendo un árbol menos profundo.
+
+¿Hay alguna propiedad del árbol que permita explicar este comportamiento?
+
+Al insertar elementos en el árbol de manera óptima, logramos terminar con un arbol de profundidad menor a la que conseguiríamos con el unsorted, lo que implica que 
+para cada iteracion con el árbol requiere menos pasos y por ende, menos tiempo.
+

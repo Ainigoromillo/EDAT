@@ -28,7 +28,7 @@ void freeData(Vertex **data, int n) {
 Vertex **loadData(FILE *pf, int n) {
   int i;
   char string[MAX_LINE];
-  Vertex **data = NULL, *vertice = NULL;
+  Vertex **data = NULL;
 
   if (!pf || (n <= 0)) {
     return NULL;
