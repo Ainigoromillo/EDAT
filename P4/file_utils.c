@@ -123,13 +123,28 @@ int float_print(FILE *pf, const void *a) {
 }
 
 
-void *string_copy(const void *src) { return strdup(src); }
+void *string_copy(const void *src) { 
+  char **pstr=NULL, *str=NULL;
+  /*
+  if(!(pstr = (char **)calloc(1, sizeof(char *)))){
+    return NULL;
+  }*/
+
+  if(!src || !(str = (char *)calloc(strlen(src) + 1, sizeof(char)))){
+    free(pstr);
+    return NULL;
+  }
+
+  strcpy(str, src);
+  /**pstr = str;*/
+  return (void *)str;
+}
 
 int string_cmp(const void *c1, const void *c2) {
   if (!c1 || !c2)
     return 0;
 
-  return (strcmp(*(char **)c1, *(char **)c2));
+  return (strcmp(((char *)c1), ((char*)c2)));
 }
 
 void string_free(void *src) { free((char *)src); }

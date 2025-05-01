@@ -1,24 +1,27 @@
 {
   "version": "0.2.0",
   "configurations": [
-    {
-      "name": "C/C++ Runner: Debug Session",
-      "type": "cppdbg",
-      "request": "launch",
-      "args": ["100", "700"],
-      "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": "c:/Users/matte/Documents/EDAT/Prácticas/EDAT",
-      "program": "c:/Users/matte/Documents/EDAT/Prácticas/EDAT/p2_material/p2_e2",
-      "MIMode": "gdb",
-      "miDebuggerPath": "gdb",
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ]
-    }
+
+      {
+          "name": "Debug with Makefile",
+          "type": "cppdbg",
+          "request": "launch",
+          "program": "/home/matteo/Documents/EDAT/Practicas/EDAT/P4/p4_e2",
+          "args": ["./data/data_string_10.txt", "./out/data_string_10.out"],
+          "stopAtEntry": false,
+          "cwd": "/home/matteo/Documents/EDAT/Practicas/EDAT/P4/",
+          "environment": [],
+          "externalConsole": false,
+          "MIMode": "gdb",
+          "setupCommands": [
+              {
+                  "description": "Enable pretty-printing",
+                  "text": "-enable-pretty-printing",
+                  "ignoreFailures": true
+              }
+          ],
+          "preLaunchTask": "make",
+          "miDebuggerPath": "/usr/bin/gdb"
+      }
   ]
 }
