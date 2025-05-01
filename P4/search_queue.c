@@ -46,6 +46,11 @@ Status search_queue_push(SearchQueue *q, void *ele){
     return tree_insert(q->data, ele);
 }
 
+Bool search_queue_contains(SearchQueue *q, void *ele){
+    if(!q || !q->data || !ele) return FALSE;
+    return tree_contains(q->data, ele);
+}
+
 void *search_queue_pop(SearchQueue *q){
     void *e=NULL;
     if(!q || !q->data) return NULL;
@@ -83,5 +88,5 @@ size_t search_queue_size(const SearchQueue *q){
 int search_queue_print(FILE *fp, const SearchQueue *q){
     if(!fp || !q) return PRINT_ERROR;
 
-    return tree_preOrder(fp, q->data);
+    return tree_inOrder(fp, q->data);
 }

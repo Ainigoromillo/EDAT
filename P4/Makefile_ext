@@ -21,6 +21,11 @@ run_e2: p4_e2
 	./p4_e2 $(DATA)/data_string_1K.txt $(OUT)/data_string_1K.out
 	./p4_e2 $(DATA)/data_string_2K.txt $(OUT)/data_string_2K.out
 
+run_e2V: p4_e2
+	valgrind --leak-check=full ./p4_e2 $(DATA)/data_string_10.txt $(OUT)/data_string_10.out
+	valgrind --leak-check=full ./p4_e2 $(DATA)/data_string_1K.txt $(OUT)/data_string_1K.out
+	valgrind --leak-check=full ./p4_e2 $(DATA)/data_string_2K.txt $(OUT)/data_string_2K.out
+
 run_e3: p4_e3
 	./p4_e3 grades.txt
 

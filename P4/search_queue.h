@@ -112,4 +112,14 @@ size_t search_queue_size(const SearchQueue *q);
  *  */
 int search_queue_print(FILE *fp, const SearchQueue *q);
 
+
+/**
+ * @brief This function checks whether a certain element is already found in the search queue
+ * 
+ * @param q A pointer to the SearchQueue
+ * @param ele The element we are searching for
+ * @return Bool: FALSE if an error ocurrs or the element is not present in the tree and TRUE otherwise
+ */
+Bool search_queue_contains(SearchQueue *q, void *ele);
+
 #endif

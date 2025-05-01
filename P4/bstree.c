@@ -311,12 +311,12 @@ BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem){
      return NULL;
    }
    /*Si el elemento buscaso es menor que el actual, avanzamos hacia el nodo a la izquierda del actual*/
-   if (cmp_elem(pn->info, elem) < 0)
+   if (cmp_elem(pn->info, elem) > 0)
    {
      pn->left = _bst_remove_rec(pn->left, elem, cmp_elem);
    }
    /*Si el elemento buscaso es mayor que el actual, avanzamos hacia el nodo a la derecha del actual*/
-   else if (cmp_elem(pn->info, elem) > 0)
+   else if (cmp_elem(pn->info, elem) < 0)
    {
      pn->right = _bst_remove_rec(pn->right, elem, cmp_elem);
    }
