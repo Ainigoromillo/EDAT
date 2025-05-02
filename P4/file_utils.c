@@ -119,24 +119,18 @@ void float_free(void *a) { free((float *)a); }
 int float_print(FILE *pf, const void *a) {
   if (!pf || !a)
     return -1;
-  return fprintf(pf, "%f ", *(float *)a);
+  return fprintf(pf, "%.2f ", *(float *)a);
 }
 
 
 void *string_copy(const void *src) { 
   char **pstr=NULL, *str=NULL;
-  /*
-  if(!(pstr = (char **)calloc(1, sizeof(char *)))){
-    return NULL;
-  }*/
-
   if(!src || !(str = (char *)calloc(strlen(src) + 1, sizeof(char)))){
     free(pstr);
     return NULL;
   }
 
   strcpy(str, src);
-  /**pstr = str;*/
   return (void *)str;
 }
 
