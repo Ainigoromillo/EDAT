@@ -48,6 +48,7 @@ int main(int argc, char const *argv[]) {
 
     while(fgets(line, MAX_LINE_LENGTH, f_in)){
         e = string_copy(line);
+        if(search_queue_contains(q, e)) string_free(e);
         search_queue_push(q, e);
     }
 
