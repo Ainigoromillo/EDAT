@@ -59,6 +59,7 @@ void _bst_node_free_rec(BSTNode *pn)
   
   _bst_node_free_rec(pn->left);
   _bst_node_free_rec(pn->right);
+  if(pn->info) free(pn->info);
   _bst_node_free(pn);
 
   return;

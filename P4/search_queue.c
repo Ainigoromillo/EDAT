@@ -90,3 +90,14 @@ int search_queue_print(FILE *fp, const SearchQueue *q){
 
     return tree_inOrder(fp, q->data);
 }
+
+void *search_queue_popBack(const SearchQueue *q){
+    void *max = NULL;
+    
+    if(!q) return NULL;
+    max = tree_find_max(q->data);
+    if(!max || !tree_remove(q->data, max)) return NULL;
+
+    return max;
+
+}

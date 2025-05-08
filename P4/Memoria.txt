@@ -15,3 +15,18 @@ Este resultado se ve en la eficiencia de ejecucion del programa, construyendo un
 Al insertar elementos en el árbol de manera óptima, logramos terminar con un arbol de profundidad menor a la que conseguiríamos con el unsorted, lo que implica que 
 para cada iteracion con el árbol requiere menos pasos y por ende, menos tiempo.
 
+
+
+
+
+Memoria Ejercicio 2:
+
+¿Qué diferencias y similitudes hay entre el TAD SQ y el TAD Cola de la práctica
+anterior?
+
+Ambas estructuras de datos operan y se construyen mediante las funciones pop y push, sin embargo, la Cola de la anterior práctica 
+seguía la regla "First in, First out", mientras que la SQ 
+
+¿Qué coste (aproximado) tiene la operación de extraer un elemento en el TAD SQ?
+¿Sería posible hacer que esta operación fuera 𝒪(1)? 
+

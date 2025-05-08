@@ -122,4 +122,12 @@ int search_queue_print(FILE *fp, const SearchQueue *q);
  */
 Bool search_queue_contains(SearchQueue *q, void *ele);
 
+/**
+ * @brief This function pops the back element (MAx) of a SearchQueue
+ * 
+ * @param q a pointer to the SearchQueue
+ * @return void* a pointer to the maximum element in the tree of the queue, the element at the back
+ */
+void *search_queue_popBack(const SearchQueue *q);
+
 #endif

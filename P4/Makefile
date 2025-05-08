@@ -2,10 +2,11 @@
 ########################################################
 CC=gcc
 CFLAGS= -g -Wall -pedantic -ansi
-EJS = p4_e2
+EJS = p4_e1 p4_e2 p4_e3
 ########################################################
 OBJECTSP4E1 = p4_e1.o vertex.o bstree.o file_utils.o
 OBJECTSP4E2 = p4_e2.o bstree.o file_utils.o search_queue.o
+OBJECTSP4E3 = p4_e3.o bstree.o file_utils.o search_queue.o
 ########################################################
 
 all: $(EJS) #clear
@@ -15,6 +16,10 @@ p4_e1: $(OBJECTSP4E1)
 
 p4_e2: $(OBJECTSP4E2)
 	$(CC) $(CFLAGS) -o p4_e2 $(OBJECTSP4E2)
+
+p4_e3: $(OBJECTSP4E3)
+	$(CC) $(CFLAGS) -o p4_e3 $(OBJECTSP4E3)
+
 
 vertex.o: vertex.c vertex.h types.h bstree.c
 	$(CC) $(CFLAGS) -c vertex.c
@@ -30,6 +35,9 @@ search_queue.o: search_queue.c search_queue.h bstree.h  types.h
 
 p4_e2.o: p4_e2.c search_queue.h types.h file_utils.h
 	$(CC) $(CFLAGS) -c p4_e2.c
+
+p4_e3.o: p4_e3.c search_queue.h types.h file_utils.h
+	$(CC) $(CFLAGS) -c p4_e3.c
 
 clean: 
 	rm -rf *.o $(EJS)
