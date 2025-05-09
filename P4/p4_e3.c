@@ -10,6 +10,10 @@
 #define MAX_LINE_LENGTH 1000
 #define EXTENSION_LENGTH 4
 #define INPUT_EXTENSION ".txt"
+#define FIRST_ARGUMENT 1
+#define N_TOTAL_ARGUMENTS 2
+
+#define halve(value) ((value) / 2)
 
 int main(int argc, const char *argv[])
 {
@@ -19,60 +23,60 @@ int main(int argc, const char *argv[])
     int n_data, i;
     char line[MAX_LINE_LENGTH];
 
-    if (argc != 2)
+    if (argc != N_TOTAL_ARGUMENTS)
     {
-        printf("Usage: %s input_file\n", argv[0]);
+        fprintf(stderr, "Usage: %s input_file\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
-    if ((strcmp(argv[1] + (strlen(argv[1]) - EXTENSION_LENGTH), INPUT_EXTENSION)))
+    if ((strcmp(argv[FIRST_ARGUMENT] + (strlen(argv[FIRST_ARGUMENT]) - EXTENSION_LENGTH), INPUT_EXTENSION)))
     {
-        printf("Input file format must be: "
+        fprintf(stderr, "Input file format must be: "
                "file%s"
                "",
                INPUT_EXTENSION);
-        return 1;
+        return EXIT_FAILURE;
     }
 
-    f_in = fopen(argv[1], "r");
+    f_in = fopen(argv[FIRST_ARGUMENT], "r");
     if (!f_in)
     {
-        printf("ERROR EN OPEN DEL FICHERO DE ENTRADA");
-        return 1;
+        fprintf(stderr, "ERROR EN OPEN DEL FICHERO DE ENTRADA");
+        return EXIT_FAILURE;
     }
 
     queue = search_queue_new(float_print, float_cmp);
     if (!queue)
     {
-        printf("ERROR EN LA CREACION DE LA COLA");
+        fprintf(stderr, "ERROR EN LA CREACION DE LA COLA");
         fclose(f_in);
-        return 1;
+        return EXIT_FAILURE;
     }
     queue_aux = search_queue_new(float_print, float_cmp);
     if (!queue_aux)
     {
-        printf("ERROR EN LA CREACION DE LA COLA AUXILIAR");
+        fprintf(stderr, "ERROR EN LA CREACION DE LA COLA AUXILIAR");
         search_queue_free(queue);
         fclose(f_in);
-        return 1;
+        return EXIT_FAILURE;
     }
 
     if (!fgets(line, MAX_LINE_LENGTH, f_in))
     {
-        printf("ERROR EN EL FGETS");
+        fprintf(stderr, "ERROR EN EL FGETS");
         search_queue_free(queue);
         search_queue_free(queue_aux);
         fclose(f_in);
-        return 1;
+        return EXIT_FAILURE;
     }
 
     n_data = atoi(line);
     if(n_data < 0){
-        printf("ERROR EN EL FORMATO DEL ARCHIVO");
+        fprintf(stderr, "ERROR EN EL FORMATO DEL ARCHIVO");
         search_queue_free(queue_aux);
         search_queue_free(queue);
         fclose(f_in);
-        return 1;
+        return EXIT_FAILURE;
     }
     
     /*insertamos todas las notas en la cola*/
@@ -82,21 +86,21 @@ int main(int argc, const char *argv[])
         grade = (float *)malloc(sizeof(float));
         if (!grade)
         {
-            printf("ERROR EN LA RESERVA DE MEMORIA PARA NOTA");
+            fprintf(stderr, "ERROR EN LA RESERVA DE MEMORIA PARA NOTA");
             search_queue_free(queue_aux);
             search_queue_free(queue);
             fclose(f_in);
-            return 1;
+            return EXIT_FAILURE;
         }
         /*Lectura de la nota en el archivo*/
         if (fscanf(f_in, "%f", grade) != 1)
         {
-            printf("ERROR EN EL FSCANF");
+            fprintf(stderr, "ERROR EN EL FSCANF");
             free(grade);
             search_queue_free(queue_aux);
             search_queue_free(queue);
             fclose(f_in);
-            return 1;
+            return EXIT_FAILURE;
         }
 
         sum += (*grade);
@@ -104,12 +108,12 @@ int main(int argc, const char *argv[])
         /*insercion de la nota en la cola*/
         if (search_queue_push(queue, (void *)grade) == ERROR)
         {
-            printf("ERROR EN EL PUSH");
+            fprintf(stderr, "ERROR EN EL PUSH");
             free(grade);
             search_queue_free(queue_aux);
             search_queue_free(queue);
             fclose(f_in);
-            return 1;
+            return EXIT_FAILURE;
         }
     }
     /*cerramos el archivo de lectura*/
@@ -128,108 +132,108 @@ int main(int argc, const char *argv[])
 
     if (n_data % 2)
     {
-        for (i = 0; i < n_data / 2; i++)
+        for (i = 0; i < halve(n_data); i++)
         {
             grade = search_queue_pop(queue);
             if (!grade)
             {
-                printf("ERROR EN EL POP PARA LA MEDIANA");
+                fprintf(stderr, "ERROR EN EL POP PARA LA MEDIANA");
                 search_queue_free(queue_aux);
                 search_queue_free(queue);
-                return 1;
+                return EXIT_FAILURE;
             }
             if (search_queue_push(queue_aux, grade) == ERROR)
             {
-                printf("ERROR EN EL PUSH PARA LA MEDIANA");
+                fprintf(stderr, "ERROR EN EL PUSH PARA LA MEDIANA");
                 free(grade);
                 search_queue_free(queue_aux);
                 search_queue_free(queue);
-                return 1;
+                return EXIT_FAILURE;
             }
         }
 
         grade = search_queue_pop(queue);
         if (!grade)
         {
-            printf("ERROR EN EL POP PARA LA MEDIANA");
+            fprintf(stderr, "ERROR EN EL POP PARA LA MEDIANA");
             search_queue_free(queue_aux);
             search_queue_free(queue);
-            return 1;
+            return EXIT_FAILURE;
         }
 
         mediana = *(float *)grade;
 
         if (!search_queue_push(queue, grade))
         {
-            printf("ERROR EN EL POP y PUSH PARA LA MEDIANA");
+            fprintf(stderr, "ERROR EN EL POP y PUSH PARA LA MEDIANA");
             free(grade);
             search_queue_free(queue_aux);
             search_queue_free(queue);
-            return 1;
+            return EXIT_FAILURE;
         }
     }
     else
     {
-        for (i = 0; i < n_data / 2 - 1; i++)
+        for (i = 0; i < halve(n_data) - 1; i++)
         {
             grade = search_queue_pop(queue);
             if (!grade)
             {
-                printf("ERROR EN EL POP PARA LA MEDIANA");
+                fprintf(stderr, "ERROR EN EL POP PARA LA MEDIANA");
                 search_queue_free(queue_aux);
                 search_queue_free(queue);
-                return 1;
+                return EXIT_FAILURE;
             }
             if (search_queue_push(queue_aux, grade) == ERROR)
             {
-                printf("ERROR EN EL PUSH PARA LA MEDIANA");
+                fprintf(stderr, "ERROR EN EL PUSH PARA LA MEDIANA");
                 free(grade);
                 search_queue_free(queue_aux);
                 search_queue_free(queue);
-                return 1;
+                return EXIT_FAILURE;
             }
         }
 
         grade = search_queue_pop(queue);
         if (!grade)
         {
-            printf("ERROR EN EL POP PARA LA MEDIANA");
+            fprintf(stderr, "ERROR EN EL POP PARA LA MEDIANA");
             search_queue_free(queue);
             search_queue_free(queue_aux);
-            return 1;
+            return EXIT_FAILURE;
         }
         mediana = *(float *)grade;
 
         if (search_queue_push(queue_aux, grade) == ERROR)
         {
-            printf("ERROR EN EL PUSH PARA LA MEDIANA");
+            fprintf(stderr, "ERROR EN EL PUSH PARA LA MEDIANA");
             free(grade);
             search_queue_free(queue_aux);
             search_queue_free(queue);
-            return 1;
+            return EXIT_FAILURE;
         }
 
         grade = search_queue_pop(queue);
         if (!grade)
         {
-            printf("ERROR EN EL POP PARA LA MEDIANA");
+            fprintf(stderr, "ERROR EN EL POP PARA LA MEDIANA");
             search_queue_free(queue);
             search_queue_free(queue_aux);
-            return 1;
+            return EXIT_FAILURE;
         }
 
         mediana += *(float *)grade;
 
         if (search_queue_push(queue_aux, grade) == ERROR)
         {
-            printf("ERROR EN EL PUSH PARA LA MEDIANA");
+            fprintf(stderr, "ERROR EN EL PUSH PARA LA MEDIANA");
             free(grade);
             search_queue_free(queue_aux);
             search_queue_free(queue);
-            return 1;
+            return EXIT_FAILURE;
         }
 
-        mediana = mediana / 2;
+        mediana = halve(mediana);
     }
 
     /*Ahora devolvemos los elementos extraidos a la cola inicial*/
@@ -238,18 +242,18 @@ int main(int argc, const char *argv[])
         grade = search_queue_pop(queue_aux);
         if (!grade)
         {
-            printf("ERROR EN EL POP PARA VACIAR LA COLA AUXILIAR");
+            fprintf(stderr, "ERROR EN EL POP PARA VACIAR LA COLA AUXILIAR");
             search_queue_free(queue_aux);
             search_queue_free(queue);
-            return 1;
+            return EXIT_FAILURE;
         }
         if (search_queue_push(queue, grade) == ERROR)
         {
-            printf("ERROR EN EL PUSH PARA LA COLA PRINCIPAL");
+            fprintf(stderr, "ERROR EN EL PUSH PARA LA COLA PRINCIPAL");
             free(grade);
             search_queue_free(queue_aux);
             search_queue_free(queue);
-            return 1;
+            return EXIT_FAILURE;
         }
     }
 
@@ -262,18 +266,18 @@ int main(int argc, const char *argv[])
         grade = search_queue_pop(queue);
         if (!grade)
         {
-            printf("ERROR EN POP DE COLA");
+            fprintf(stderr, "ERROR EN POP DE COLA");
             search_queue_free(queue);
             search_queue_free(queue_aux);
-            return 1;
+            return EXIT_FAILURE;
         }
         if (search_queue_push(queue_aux, grade) == ERROR)
         {
-            printf("ERROR EN EL PUSH A COLA AUXILIAR");
+            fprintf(stderr, "ERROR EN EL PUSH A COLA AUXILIAR");
             free(grade);
             search_queue_free(queue_aux);
             search_queue_free(queue);
-            return 1;
+            return EXIT_FAILURE;
         }
 
         printf("%.2f ", *(float *)grade);
@@ -285,18 +289,18 @@ int main(int argc, const char *argv[])
         grade = search_queue_pop(queue_aux);
         if (!grade)
         {
-            printf("ERROR EN EL POP PARA VACIAR LA COLA AUXILIAR");
+            fprintf(stderr, "ERROR EN EL POP PARA VACIAR LA COLA AUXILIAR");
             search_queue_free(queue_aux);
             search_queue_free(queue);
-            return 1;
+            return EXIT_FAILURE;
         }
         if (search_queue_push(queue, grade) == ERROR)
         {
-            printf("ERROR EN EL PUSH PARA LA COLA PRINCIPAL");
+            fprintf(stderr, "ERROR EN EL PUSH PARA LA COLA PRINCIPAL");
             free(grade);
             search_queue_free(queue_aux);
             search_queue_free(queue);
-            return 1;
+            return EXIT_FAILURE;
         }
     }
 
@@ -308,19 +312,20 @@ int main(int argc, const char *argv[])
         grade = search_queue_popBack(queue);
         if (!grade)
         {
-            printf("ERROR EN POP DE COLA");
+            fprintf(stderr, "ERROR EN POP DE COLA");
             search_queue_free(queue);
             search_queue_free(queue_aux);
-            return 1;
+            return EXIT_FAILURE;
         }
         
         printf("%.2f ", *(float *)grade);
         free(grade);
     }
+    printf("\n");
 
     /*liberamos memoria*/
     search_queue_free(queue);
     search_queue_free(queue_aux);
 
-    return 0;
+    return EXIT_SUCCESS;
 }

@@ -24,9 +24,10 @@ Memoria Ejercicio 2:
 ¿Qué diferencias y similitudes hay entre el TAD SQ y el TAD Cola de la práctica
 anterior?
 
-Ambas estructuras de datos operan y se construyen mediante las funciones pop y push, sin embargo, la Cola de la anterior práctica 
-seguía la regla "First in, First out", mientras que la SQ 
+Ambas estructuras de datos almacenan un conjunto de elementos en un orden determinado y se operan mediante las funciones Push y Pop. Sin embargo, mientras que la cola se rige por la regla "First in First Out" o "FIFO", ordenando los elementos según su orden de llegada, la SQ toma una relación de orden (definida por la función de comparación dada) y decide en base a ella las posiciones de los elementos. De este modo, mientras que en la cola "pop" devuelve el primer elemento que se introdujo y push sitúa el nuevo elemento al final, en el caso de la SQ, pop devuelve el menor elemento entre los presentes y "push" inserta los elementos acorde al orden establecido.
 
 ¿Qué coste (aproximado) tiene la operación de extraer un elemento en el TAD SQ?
-¿Sería posible hacer que esta operación fuera 𝒪(1)? 
+El coste aproximado de la extracción de los elementos es O(log(n)) en caso de que el árbol subyacente sea completo o esté cerca de serlo, y O(n) en el peor de los casos, donde el árbol es una fila de elementos ordenados, siendo n el número de elementos en la SQ.
+¿Sería posible hacer que esta operación fuera 𝒪(1)?
+Esto no sería posible, pues la extracción del elemento mínimo siempre requiere 1) su búsqueda y 2)el hallazgo de un nuevo elemento mínimo. Por este motivo, incluso si de incluyese en el TAD SQ un puntero al elemento mínimo, que podría parecer una solución atractiva, lo cierto es que eliminar el elemento al que apunta dicho puntero requeriría igualmente recorrer el árbol para encontrar el siguiente elemento más pequeño.  
 
