@@ -15,6 +15,23 @@
 
 #define halve(value) ((value) / 2)
 
+
+void free_SQ_with_elements(SearchQueue *q){
+    void *e = NULL;
+    if(!q){
+        return;
+    }
+    
+    while(!search_queue_isEmpty(q)){
+        e = search_queue_pop(q);
+        if(e){
+            free((float *)e);
+            e = NULL;
+        }
+    }
+    search_queue_free(q);
+}
+
 int main(int argc, const char *argv[])
 {
     FILE *f_in = NULL;
@@ -87,8 +104,8 @@ int main(int argc, const char *argv[])
         if (!grade)
         {
             fprintf(stderr, "ERROR EN LA RESERVA DE MEMORIA PARA NOTA");
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             fclose(f_in);
             return EXIT_FAILURE;
         }
@@ -97,8 +114,8 @@ int main(int argc, const char *argv[])
         {
             fprintf(stderr, "ERROR EN EL FSCANF");
             free(grade);
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             fclose(f_in);
             return EXIT_FAILURE;
         }
@@ -110,8 +127,8 @@ int main(int argc, const char *argv[])
         {
             fprintf(stderr, "ERROR EN EL PUSH");
             free(grade);
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             fclose(f_in);
             return EXIT_FAILURE;
         }
@@ -138,16 +155,16 @@ int main(int argc, const char *argv[])
             if (!grade)
             {
                 fprintf(stderr, "ERROR EN EL POP PARA LA MEDIANA");
-                search_queue_free(queue_aux);
-                search_queue_free(queue);
+                free_SQ_with_elements(queue_aux);
+                free_SQ_with_elements(queue);
                 return EXIT_FAILURE;
             }
             if (search_queue_push(queue_aux, grade) == ERROR)
             {
                 fprintf(stderr, "ERROR EN EL PUSH PARA LA MEDIANA");
                 free(grade);
-                search_queue_free(queue_aux);
-                search_queue_free(queue);
+                free_SQ_with_elements(queue_aux);
+                free_SQ_with_elements(queue);
                 return EXIT_FAILURE;
             }
         }
@@ -156,8 +173,8 @@ int main(int argc, const char *argv[])
         if (!grade)
         {
             fprintf(stderr, "ERROR EN EL POP PARA LA MEDIANA");
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
 
@@ -167,8 +184,8 @@ int main(int argc, const char *argv[])
         {
             fprintf(stderr, "ERROR EN EL POP y PUSH PARA LA MEDIANA");
             free(grade);
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
     }
@@ -180,16 +197,16 @@ int main(int argc, const char *argv[])
             if (!grade)
             {
                 fprintf(stderr, "ERROR EN EL POP PARA LA MEDIANA");
-                search_queue_free(queue_aux);
-                search_queue_free(queue);
+                free_SQ_with_elements(queue_aux);
+                free_SQ_with_elements(queue);
                 return EXIT_FAILURE;
             }
             if (search_queue_push(queue_aux, grade) == ERROR)
             {
                 fprintf(stderr, "ERROR EN EL PUSH PARA LA MEDIANA");
                 free(grade);
-                search_queue_free(queue_aux);
-                search_queue_free(queue);
+                free_SQ_with_elements(queue_aux);
+                free_SQ_with_elements(queue);
                 return EXIT_FAILURE;
             }
         }
@@ -198,8 +215,8 @@ int main(int argc, const char *argv[])
         if (!grade)
         {
             fprintf(stderr, "ERROR EN EL POP PARA LA MEDIANA");
-            search_queue_free(queue);
-            search_queue_free(queue_aux);
+            free_SQ_with_elements(queue);
+            free_SQ_with_elements(queue_aux);
             return EXIT_FAILURE;
         }
         mediana = *(float *)grade;
@@ -208,8 +225,8 @@ int main(int argc, const char *argv[])
         {
             fprintf(stderr, "ERROR EN EL PUSH PARA LA MEDIANA");
             free(grade);
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
 
@@ -217,8 +234,8 @@ int main(int argc, const char *argv[])
         if (!grade)
         {
             fprintf(stderr, "ERROR EN EL POP PARA LA MEDIANA");
-            search_queue_free(queue);
-            search_queue_free(queue_aux);
+            free_SQ_with_elements(queue);
+            free_SQ_with_elements(queue_aux);
             return EXIT_FAILURE;
         }
 
@@ -228,8 +245,8 @@ int main(int argc, const char *argv[])
         {
             fprintf(stderr, "ERROR EN EL PUSH PARA LA MEDIANA");
             free(grade);
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
 
@@ -243,16 +260,16 @@ int main(int argc, const char *argv[])
         if (!grade)
         {
             fprintf(stderr, "ERROR EN EL POP PARA VACIAR LA COLA AUXILIAR");
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
         if (search_queue_push(queue, grade) == ERROR)
         {
             fprintf(stderr, "ERROR EN EL PUSH PARA LA COLA PRINCIPAL");
             free(grade);
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
     }
@@ -267,16 +284,16 @@ int main(int argc, const char *argv[])
         if (!grade)
         {
             fprintf(stderr, "ERROR EN POP DE COLA");
-            search_queue_free(queue);
-            search_queue_free(queue_aux);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
         if (search_queue_push(queue_aux, grade) == ERROR)
         {
             fprintf(stderr, "ERROR EN EL PUSH A COLA AUXILIAR");
             free(grade);
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
 
@@ -290,16 +307,16 @@ int main(int argc, const char *argv[])
         if (!grade)
         {
             fprintf(stderr, "ERROR EN EL POP PARA VACIAR LA COLA AUXILIAR");
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
         if (search_queue_push(queue, grade) == ERROR)
         {
             fprintf(stderr, "ERROR EN EL PUSH PARA LA COLA PRINCIPAL");
             free(grade);
-            search_queue_free(queue_aux);
-            search_queue_free(queue);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
     }
@@ -313,8 +330,8 @@ int main(int argc, const char *argv[])
         if (!grade)
         {
             fprintf(stderr, "ERROR EN POP DE COLA");
-            search_queue_free(queue);
-            search_queue_free(queue_aux);
+            free_SQ_with_elements(queue_aux);
+            free_SQ_with_elements(queue);
             return EXIT_FAILURE;
         }
         
@@ -324,8 +341,8 @@ int main(int argc, const char *argv[])
     printf("\n");
 
     /*liberamos memoria*/
-    search_queue_free(queue);
-    search_queue_free(queue_aux);
+    free_SQ_with_elements(queue_aux);
+    free_SQ_with_elements(queue);
 
     return EXIT_SUCCESS;
 }
