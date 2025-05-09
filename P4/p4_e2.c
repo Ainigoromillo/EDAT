@@ -9,6 +9,26 @@
 #define EXTENSION_LENGTH 4
 #define INPUT_EXTENSION ".txt"
 #define OUTPUT_EXTENSION ".out"
+#define FCLOSEF_SUCCESS 0
+#define FIRST_ARGUMENT 1
+#define SECOND_ARGUMENT 2
+#define N_TOTAL_ARGUMENTS 3
+
+void free_SQ_with_elements(SearchQueue *q){
+    void *e = NULL;
+    if(!q){
+        return;
+    }
+    
+    while(!search_queue_isEmpty(q)){
+        e = search_queue_pop(q);
+        if(e){
+            string_free(e);
+            e = NULL;
+        }
+    }
+    search_queue_free(q);
+}
 
 int main(int argc, char const *argv[]) {
     FILE *f_in = NULL, *f_out = NULL;
@@ -16,48 +36,54 @@ int main(int argc, char const *argv[]) {
     void *e=NULL;
     char line[MAX_LINE_LENGTH];
   
-    if (argc != 3) {
-        printf("Usage: %s input_file output_file\n", argv[0]);
-        exit(EXIT_FAILURE);
+    if (argc != N_TOTAL_ARGUMENTS) {
+        fprintf(stderr, "Usage: %s input_file output_file\n", argv[0]);
+        return EXIT_FAILURE;
       }
 
-    if ((strcmp(argv[1] + (strlen(argv[1]) - EXTENSION_LENGTH), INPUT_EXTENSION)))
+    else if ((strcmp(argv[FIRST_ARGUMENT] + (strlen(argv[FIRST_ARGUMENT]) - EXTENSION_LENGTH), INPUT_EXTENSION)))
     {
-        printf("Input file format must be: ""file%s""", INPUT_EXTENSION);
-        return 1;
+        fprintf(stderr, "Input file format must be: ""file%s""", INPUT_EXTENSION);
+        return EXIT_FAILURE;
     }
-    if ((strcmp(argv[2] + (strlen(argv[2]) - EXTENSION_LENGTH), OUTPUT_EXTENSION)))
+    else if ((strcmp(argv[SECOND_ARGUMENT] + (strlen(argv[SECOND_ARGUMENT]) - EXTENSION_LENGTH), OUTPUT_EXTENSION)))
     {
-        printf("Output file format must be: ""file%s""", OUTPUT_EXTENSION);
-        return 1;
+        fprintf(stderr, "Output file format must be: ""file%s""", OUTPUT_EXTENSION);
+        return EXIT_FAILURE;
     }
 
-    f_in = fopen(argv[1], "r");
+    f_in = fopen(argv[FIRST_ARGUMENT], "r");
     if (!f_in)
     {
-        printf("ERROR EN OPEN DEL FICHERO DE ENTRADA");
-        return 1;
+        fprintf(stderr, "ERROR OPENING INPUT FILE");
+        return EXIT_FAILURE;
     }
 
     q = search_queue_new(string_print, string_cmp);
     if(!q){
-        printf("ERROR CREATING SEARCH QUEUE");
+        fprintf(stderr, "ERROR CREATING SEARCH QUEUE");
         fclose(f_in);
-        return 1;
+        return EXIT_FAILURE;
     }
 
     while(fgets(line, MAX_LINE_LENGTH, f_in)){
-        e = string_copy(line);
-        if(search_queue_contains(q, e)) string_free(e);
-        search_queue_push(q, e);
+        if(!search_queue_contains(q, (void *)line)){
+            e = string_copy(line);
+            search_queue_push(q, e);
+        }
     }
 
-    fclose(f_in);
+    if(fclose(f_in) != FCLOSEF_SUCCESS){
+        fprintf(stderr, "ERROR CLOSING INPUT FILE");
+        free_SQ_with_elements(q);
+        return EXIT_FAILURE;
+    }
 
-    f_out = fopen(argv[2], "w");
+    f_out = fopen(argv[SECOND_ARGUMENT], "w");
     if(!f_out){
-        printf("ERROR EN OPEN DEL FICHERO DE SALIDA");
-        return 1;
+        fprintf(stderr, "ERROR OPENING OUTPUT FILE");
+        free_SQ_with_elements(q);
+        return EXIT_FAILURE;
     }
     
     while(!search_queue_isEmpty(q)){
@@ -67,7 +93,12 @@ int main(int argc, char const *argv[]) {
         e = NULL;
     }
   
-    fclose(f_out);
+    if(fclose(f_out) != FCLOSEF_SUCCESS){
+        fprintf(stderr, "ERROR CLOSING OUTPUT FILE");
+        free_SQ_with_elements(q);
+        return EXIT_FAILURE;
+    }
+
     search_queue_free(q);
-    exit(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
   }

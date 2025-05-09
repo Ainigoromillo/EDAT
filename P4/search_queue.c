@@ -12,7 +12,7 @@ SearchQueue *search_queue_new(P_ele_print print_ele, P_ele_cmp cmp_ele){
     BSTree *new_tree=NULL;
     SearchQueue *new_search_queue=NULL;
     
-    if(!print_ele || !cmp_ele) return ERROR;
+    if(!print_ele || !cmp_ele) return NULL;
 
     if(!(new_tree = tree_init(print_ele, cmp_ele))){
         return NULL;

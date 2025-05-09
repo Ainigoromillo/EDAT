@@ -29,6 +29,6 @@ run_e2V: p4_e2
 run_e3: p4_e3
 	./p4_e3 grades.txt
 
-run_e2_light: p4_e2
-	valgrind --leak-check=full ./p4_e2 $(DATA)/data_string_10.txt $(OUT)/data_string_10.out
-# Remaining rules must be in main Makefile.
+run_e3V: p4_e3
+	valgrind --leak-check=full ./p4_e3 grades.txt
+
